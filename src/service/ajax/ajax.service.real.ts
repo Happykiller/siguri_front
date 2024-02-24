@@ -10,13 +10,12 @@ export class AjaxServiceReal {
   async post(url:string, datas: any): Promise<any> {
     try {
       const storage = JSON.parse(sessionStorage.getItem("seguri-storage"));
-      const token = storage.state.accessToken;
+      const token = storage?.state.accessToken;
 
       const response = await fetch(config.api_url + url, {
         method: 'POST',
         mode: 'cors', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'include', // include, *same-origin, omit
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token??'token'}`
@@ -44,7 +43,6 @@ export class AjaxServiceReal {
       method: 'GET',
       mode: 'cors', // no-cors, *cors, same-origin
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'include', // include, *same-origin, omit
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
         'Accept': 'application/json, application/xml, text/plain, text/html, *.*',

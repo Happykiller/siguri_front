@@ -11,7 +11,7 @@ export class AuthUsecase {
 
   async execute(dto: AuthUsecaseDto): Promise<AuthUsecaseModel>  {
     try {
-      const response:any = await this.inversify.ajaxService.post('graphql', 
+      const response:any = await this.inversify.ajaxService.post('', 
         {
           operationName: 'auth',
           variables: dto,
