@@ -1,0 +1,22 @@
+/* Footer Style */
+.footer {
+  font-size: 10px;
+  color: #555;
+  text-align: center;
+  padding: 5px;
+  overflow:hidden;
+  position: fixed;
+  bottom: 0px;
+  left: 50%;                   /* center link horizontally */
+  transform: translateX(-50%); /* center link horizontally */
+  div {
+    all: unset;
+  }
+  a {
+    color: #007bff;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

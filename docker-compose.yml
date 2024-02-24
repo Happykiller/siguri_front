@@ -1,0 +1,11 @@
+## Fichier : docker-compose.yml
+version: '3.8'
+
+services:
+  seguri_front:
+    container_name: seguri_front
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "8084:80"
+    restart: always

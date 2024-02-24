@@ -1,2 +1,2 @@
-# siguri_front
-The front for Siguri
+# Seguri_front
+Front for service Seguri
