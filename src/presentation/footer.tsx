@@ -3,9 +3,23 @@ import { Trans } from 'react-i18next';
 
 import '@presentation/footer.scss';
 import { version } from '../../package.json';
+import { SystemInfoUsecaseModel } from '../usecase/system/model/systemInfo.usecase.model';
+import inversify from '../common/inversify';
+import { CODES } from '../common/codes';
 
 export const Footer = () => {
-  let backVersion = '0.42.0';
+  const [backVersion, setBackVersion] = React.useState('Loading...');
+  inversify.systemInfoUsecase.execute()
+    .then((response:SystemInfoUsecaseModel) => {
+      if(response.message === CODES.SUCCESS) {
+        setBackVersion(response.data.version);
+      } else {
+        setBackVersion(`Error! ${response.error}`);
+      }
+    })
+    .catch((error:any) => {
+      setBackVersion(`Error! ${error}`);
+    });
 
   return (
     <div className='footer'>

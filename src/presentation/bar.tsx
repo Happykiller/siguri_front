@@ -115,7 +115,7 @@ function Bar() {
               flexGrow: 1
             }}
           >
-            <Link to="/admin" className='lilith'>Lilith</Link>
+            <Link to="/home" className='title'>Siguri</Link>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (

@@ -1,7 +1,7 @@
 import { CODES } from '@src/common/codes';
 import { Inversify } from '@src/common/inversify';
-import { AuthUsecaseDto } from '@src/usecase/auth/dto/auth.usecase.dto';
-import { AuthUsecaseModel } from '@src/usecase/auth/model/auth.usecase.model';
+import { AuthUsecaseDto } from '@usecase/auth/dto/auth.usecase.dto';
+import { AuthUsecaseModel } from '@usecase/auth/model/auth.usecase.model';
 
 export class AuthUsecase {
 
