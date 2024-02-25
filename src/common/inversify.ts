@@ -7,6 +7,7 @@ import { LoggerServiceReal } from '@service/logger/logger.service.real';
 import { GraphqlServiceFake } from '@service/graphql/graphql.service.fake';
 import { GraphqlServiceFetch } from '@service/graphql/graphql.service.fetch';
 import { SessionInfoUsecase } from '@usecase/sessionInfo/systemInfo.usecase';
+import { GeneratePasswordUsecase } from '@src/usecase/generatePassword/generatePassword.usecase';
 
 export class Inversify {
   authUsecase: AuthUsecase;
@@ -14,6 +15,7 @@ export class Inversify {
   graphqlService: GraphqlService;
   sessionInfo: SessionInfoUsecase;
   systemInfoUsecase: SystemInfoUsecase;
+  generatePasswordUsecase: GeneratePasswordUsecase;
 
   constructor() {
     // Usecases
@@ -21,6 +23,7 @@ export class Inversify {
     this.loggerService = new LoggerServiceReal();
     this.sessionInfo = new SessionInfoUsecase(this);
     this.systemInfoUsecase = new SystemInfoUsecase(this);
+    this.generatePasswordUsecase = new GeneratePasswordUsecase(this);
 
     // Services
     if (config.mode === 'prod') {

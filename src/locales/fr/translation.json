@@ -1,6 +1,10 @@
 {
+  "bank": {
+    "title": "La bank"
+  },
   "bar": {
     "bank": "La Bank",
+    "password": "Mot de passe",
     "logout": "Quitter",
     "settings": "Réglages"
   },
@@ -29,5 +33,12 @@
   },
   "home": {
     "title": "Service Siguri"
+  },
+  "password": {
+    "title": "Mot de passe",
+    "length": "Longeur",
+    "generate": "Générer",
+    "FAIL": "Echec de la génération",
+    "generated": "Mot de passe : "
   }
 }
