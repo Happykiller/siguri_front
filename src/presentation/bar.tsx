@@ -67,7 +67,7 @@ function Bar() {
               display: { xs: 'none', md: 'flex' }
             }}
           >
-            <Link to="/bank" className='title'>Siguri</Link>
+            <Link to="/" className='title'>Siguri</Link>
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>

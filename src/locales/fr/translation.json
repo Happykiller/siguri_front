@@ -25,7 +25,7 @@
     "title": "Authentification",
     "login": "Entrer votre nom",
     "password": "Entrer votre mot de passe",
-    "error": "Erreur : "
+    "AUTH_FAIL_WRONG_CREDENTIAL": "Identifiants incorrects"
   },
   "home": {
     "title": "Service Siguri"

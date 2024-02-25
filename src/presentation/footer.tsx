@@ -2,24 +2,27 @@ import * as React from 'react';
 import { Trans } from 'react-i18next';
 
 import '@presentation/footer.scss';
+import { CODES } from '@src/common/codes';
 import { version } from '../../package.json';
-import { SystemInfoUsecaseModel } from '../usecase/system/model/systemInfo.usecase.model';
-import inversify from '../common/inversify';
-import { CODES } from '../common/codes';
+import inversify from '@src/common/inversify';
+import { SystemInfoUsecaseModel } from '@usecase/system/model/systemInfo.usecase.model';
 
 export const Footer = () => {
   const [backVersion, setBackVersion] = React.useState('Loading...');
-  inversify.systemInfoUsecase.execute()
-    .then((response:SystemInfoUsecaseModel) => {
-      if(response.message === CODES.SUCCESS) {
-        setBackVersion(response.data.version);
-      } else {
-        setBackVersion(`Error! ${response.error}`);
-      }
-    })
-    .catch((error:any) => {
-      setBackVersion(`Error! ${error}`);
-    });
+
+  if (backVersion === 'Loading...') {
+    inversify.systemInfoUsecase.execute()
+      .then((response:SystemInfoUsecaseModel) => {
+        if(response.message === CODES.SUCCESS) {
+          setBackVersion(response.data.version);
+        } else {
+          setBackVersion(`Error! ${response.error}`);
+        }
+      })
+      .catch((error:any) => {
+        setBackVersion(`Error! ${error}`);
+      });
+  }
 
   return (
     <div className='footer'>

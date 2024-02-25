@@ -1,27 +1,23 @@
 import { CODES } from '@src/common/codes';
 import { Inversify } from '@src/common/inversify';
-import { AuthUsecaseDto } from '@usecase/auth/dto/auth.usecase.dto';
-import { AuthUsecaseModel } from '@usecase/auth/model/auth.usecase.model';
+import { SessionInfoUsecaseModel } from '@usecase/sessionInfo/model/sessionInfo.usecase.model';
 
-export class AuthUsecase {
+export class SessionInfoUsecase {
+
+  SessionInfo:any;
 
   constructor(
     private inversify:Inversify
   ){}
 
-  async execute(dto: AuthUsecaseDto): Promise<AuthUsecaseModel>  {
+  async execute(): Promise<SessionInfoUsecaseModel>  {
     try {
       const response:any = await this.inversify.ajaxService.post('', 
         {
-          operationName: 'auth',
-          variables: dto,
-          query: `query auth($login: String!, $password: String!) {
-            auth (
-              dto: {
-                login: $login
-                password: $password
-              }
-            ) {
+          operationName: 'getSessionInfo',
+          variables: {},
+          query: `query getSessionInfo {  
+            getSessionInfo {
               access_token
               id
               code
@@ -41,11 +37,11 @@ export class AuthUsecase {
 
       return {
         message: CODES.SUCCESS,
-        data: response.data.auth
+        data: response.data.getSessionInfo
       }
     } catch (e: any) {
       return {
-        message: CODES.AUTH_FAIL_WRONG_CREDENTIAL,
+        message: CODES.FAIL,
         error: e.message
       }
     }

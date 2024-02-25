@@ -1,4 +1,4 @@
-export interface AuthUsecaseModel {
+export interface SessionInfoUsecaseModel {
   message: string;
   data?: {
     id: string;
