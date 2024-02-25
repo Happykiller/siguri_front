@@ -12,7 +12,7 @@ export class SessionInfoUsecase {
 
   async execute(): Promise<SessionInfoUsecaseModel>  {
     try {
-      const response:any = await this.inversify.ajaxService.post('', 
+      const response:any = await this.inversify.graphqlService.send(
         {
           operationName: 'getSessionInfo',
           variables: {},

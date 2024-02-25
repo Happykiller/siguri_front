@@ -1,17 +1,17 @@
 import config from '@src/config/';
-import AjaxService from '@service/ajax/ajax.service';
 import { AuthUsecase } from '@usecase/auth/auth.usecase';
 import LoggerService from '@service/logger/logger.service';
-import { AjaxServiceReal } from '@service/ajax/ajax.service.real';
-import { AjaxServiceFake } from '@service/ajax/ajax.service.fake';
+import GraphqlService from '@service/graphql/graphql.service';
 import { SystemInfoUsecase } from '@usecase/system/systemInfo.usecase';
 import { LoggerServiceReal } from '@service/logger/logger.service.real';
+import { GraphqlServiceFake } from '@service/graphql/graphql.service.fake';
+import { GraphqlServiceFetch } from '@service/graphql/graphql.service.fetch';
 import { SessionInfoUsecase } from '@usecase/sessionInfo/systemInfo.usecase';
 
 export class Inversify {
   authUsecase: AuthUsecase;
-  ajaxService: AjaxService;
   loggerService: LoggerService;
+  graphqlService: GraphqlService;
   sessionInfo: SessionInfoUsecase;
   systemInfoUsecase: SystemInfoUsecase;
 
@@ -24,9 +24,9 @@ export class Inversify {
 
     // Services
     if (config.mode === 'prod') {
-      this.ajaxService = new AjaxServiceReal(this);
+      this.graphqlService = new GraphqlServiceFetch(this);
     } else {
-      this.ajaxService = new AjaxServiceFake();
+      this.graphqlService = new GraphqlServiceFake();
     }
 
   }

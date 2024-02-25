@@ -2,14 +2,14 @@ import { mock, MockProxy } from 'jest-mock-extended';
 
 import { CODES } from '@src/common/codes';
 import { Inversify } from '@src/common/inversify';
-import AjaxService from '@service/ajax/ajax.service';
 import { AuthUsecase } from '@usecase/auth/auth.usecase';
+import GraphqlService from '@service/graphql/graphql.service';
 
 describe('AuthUsecase', () => {
   const mockInversify: MockProxy<Inversify> = mock<Inversify>();
-  const mockAjaxService: MockProxy<AjaxService> = mock<AjaxService>();
+  const mockGraphqlService: MockProxy<GraphqlService> = mock<GraphqlService>();
 
-  mockInversify.ajaxService = mockAjaxService;
+  mockInversify.graphqlService = mockGraphqlService;
 
   const usecase: AuthUsecase = new AuthUsecase(mockInversify);
 
@@ -36,7 +36,7 @@ describe('AuthUsecase', () => {
         modification: "1706429496000",
         language: "fr"
       };
-      mockAjaxService.post.mockResolvedValue({
+      mockGraphqlService.send.mockResolvedValue({
         data: {
           auth: data
         }
@@ -52,7 +52,7 @@ describe('AuthUsecase', () => {
 
     it('should get response wrong credential', async () => {
       // arrange
-      mockAjaxService.post.mockResolvedValue({
+      mockGraphqlService.send.mockResolvedValue({
         errors: [
           {
             message: 'Credentials wrong'
@@ -73,7 +73,7 @@ describe('AuthUsecase', () => {
 
     it('should manage error', async () => {
       // arrange
-      mockAjaxService.post.mockRejectedValue(new Error('error'));
+      mockGraphqlService.send.mockRejectedValue(new Error('error'));
       // act
       const response = await usecase.execute({
         login: 'login',

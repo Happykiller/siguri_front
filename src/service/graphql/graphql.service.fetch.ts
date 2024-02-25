@@ -1,19 +1,19 @@
 import config from '@src/config';
 import { Inversify } from '@src/common/inversify';
-import AjaxService from './ajax.service';
+import GraphqlService from './graphql.service';
 
-export class AjaxServiceReal implements AjaxService {
+export class GraphqlServiceFetch implements GraphqlService {
 
   constructor(
     private inversify:Inversify
   ){}
 
-  async post(url:string, datas: any): Promise<any> {
+  async send(datas: any): Promise<any> {
     try {
       const storage = JSON.parse(sessionStorage.getItem("siguri-storage"));
       const token = storage?.state.access_token;
 
-      const response = await fetch(config.api_url + url, {
+      const response = await fetch(config.api_url, {
         method: 'POST',
         mode: 'cors', // no-cors, *cors, same-origin
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached

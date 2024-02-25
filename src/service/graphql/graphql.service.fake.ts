@@ -1,5 +1,7 @@
-export class AjaxServiceFake {
-  post(url:string, datas: any): Promise<any> {
+import GraphqlService from "@service/graphql/graphql.service";
+
+export class GraphqlServiceFake implements GraphqlService {
+  send(datas: any): Promise<any> {
     if (datas.operationName === 'auth') {
       return Promise.resolve({
         "data": {
@@ -16,10 +18,6 @@ export class AjaxServiceFake {
         }
       });
     }
-    throw new Error('Method not implemented.');
-  }
-  
-  get(url:string, datas: any): Promise<any> {
     throw new Error('Method not implemented.');
   }
 } 
