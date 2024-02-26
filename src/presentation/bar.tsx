@@ -119,7 +119,7 @@ function Bar() {
               flexGrow: 1
             }}
           >
-            <Link to="/home" className='title'>Siguri</Link>
+            <Link to="/" className='title'>Siguri</Link>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
