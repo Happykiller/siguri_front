@@ -5,7 +5,7 @@
   justify-content: center;
   height: 95vh; /* Adjust to your needs */
   .title {
-    font-size: 8vw;
+    font-size: clamp(32px, 8vw, 44px);
     font-weight: bold;
     margin-bottom: 2em;
   }

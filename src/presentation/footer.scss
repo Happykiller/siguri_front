@@ -1,6 +1,6 @@
 /* Footer Style */
 .footer {
-  font-size: 2vw;
+  font-size: clamp(8px, 2vw, 16px);
   width: 100%;
   color: #555;
   text-align: center;
