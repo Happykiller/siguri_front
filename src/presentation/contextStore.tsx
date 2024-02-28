@@ -7,6 +7,10 @@ export interface ContextStoreModel {
   access_token: string,
   name_first: string,
   name_last: string,
+  chests_secret: {
+    id: string;
+    secret: string;
+  }[]
   reset: () => void
 }
 
@@ -16,6 +20,7 @@ const initialState:any = {
   access_token: null,
   name_first: null,
   name_last: null,
+  chests_secret: null,
 }
 
 const contextPersist = persist<ContextStoreModel>(
@@ -24,8 +29,8 @@ const contextPersist = persist<ContextStoreModel>(
     reset: () => set(initialState)
   }),
   {
-      name: "siguri-storage",
-      storage: createJSONStorage(() => sessionStorage),
+    name: "siguri-storage",
+    storage: createJSONStorage(() => sessionStorage),
   }
 );
 

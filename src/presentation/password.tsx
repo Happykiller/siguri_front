@@ -1,16 +1,19 @@
 import * as React from 'react';
-import { Trans } from 'react-i18next';
-import { Button, Checkbox, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Trans, useTranslation } from 'react-i18next';
+import { Button, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 
 import '@presentation/common.scss';
 import Bar from '@presentation/bar';
-import { Footer } from '@presentation/footer';
+import { CODES } from '@src/common/codes';
 import { Send } from '@mui/icons-material';
 import inversify from '@src/common/inversify';
-import { CODES } from '@src/common/codes';
-import { GeneratePasswordUsecaseModel } from '@src/usecase/generatePassword/model/generatePassword.usecase.model';
+import { Footer } from '@presentation/footer';
+import { FlashStore, flashStore} from '@presentation/flash';
+import { GeneratePasswordUsecaseModel } from '@usecase/generatePassword/model/generatePassword.usecase.model';
 
 export const Password = () => {
+  const { t } = useTranslation();
+  const flash:FlashStore = flashStore();
   const [qry, setQry] = React.useState({
     loading: null,
     data: null,
@@ -34,6 +37,7 @@ export const Password = () => {
           ...qry,
           data: response.data.password
         }));
+        flash.open(t('password.sucess'));
       } else {
         inversify.loggerService.debug(response.error);
         setQry(qry => ({

@@ -6,10 +6,12 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import '@src/i18n';
 import '@src/index.scss';
+import Flash from '@presentation/flash';
 import { Home } from '@presentation/home';
 import { Bank } from '@presentation/bank';
 import { Login } from '@presentation/login';
 import { Guard } from '@presentation/guard';
+import { Chest } from '@presentation/chest';
 import { Password } from '@presentation/password';
 
 const router = createBrowserRouter([
@@ -29,6 +31,10 @@ const router = createBrowserRouter([
     path: "/bank",
     element: <Guard><Bank /></Guard>,
   },
+  {
+    path: "/chest",
+    element: <Guard><Chest /></Guard>,
+  },
 ]);
 
 const darkTheme = createTheme({
@@ -41,5 +47,6 @@ createRoot(document.getElementById("root")).render(
   <ThemeProvider theme={darkTheme}>
     <CssBaseline />
     <RouterProvider router={router} />
+    <Flash/>
   </ThemeProvider>
 );

@@ -1,12 +1,24 @@
 {
   "bank": {
-    "title": "La bank"
+    "title": "La bank",
+    "createChest": "Créer un coffre",
+    "formChest": {
+      "create": "Créer",
+      "label": "Label",
+      "key": "Clé",
+      "description": "Description",
+      "created": "Coffre créé"
+    }
   },
   "bar": {
     "bank": "La Bank",
     "password": "Mot de passe",
     "logout": "Quitter",
     "settings": "Réglages"
+  },
+  "chest": {
+    "secret": "Entrer la clé",
+    "submit": "Entrer"
   },
   "common": {
     "done": "Valider",
@@ -41,6 +53,7 @@
     "length": "Longeur",
     "generate": "Générer",
     "FAIL": "Echec de la génération",
-    "generated": "Mot de passe : "
+    "generated": "Mot de passe : ",
+    "sucess": "Généré avec succès"
   }
 }

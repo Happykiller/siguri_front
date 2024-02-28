@@ -3,11 +3,10 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 95vh; /* Adjust to your needs */
+  height: 90vh; /* Adjust to your needs */
   padding: 20px;
   .title {
     font-size: clamp(32px, 8vw, 44px);
     font-weight: bold;
-    margin-bottom: 2em;
   }
 }
