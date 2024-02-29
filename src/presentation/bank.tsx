@@ -76,7 +76,7 @@ export const Bank = () => {
       pathname: '/chest',
       search: createSearchParams({
         chest_id: dto.chest_id,
-        label: dto.label
+        chest_label: dto.label
       }).toString()
     });
   }
@@ -176,7 +176,9 @@ export const Bank = () => {
 </div>
 ;
 
-  const createChestContent = <Grid 
+  const createChestContent = <form
+    onSubmit={handleCreateChest}
+  ><Grid 
     container
     rowSpacing={1}
     columnSpacing={{ xs: 1, sm: 2, md: 3 }}
@@ -261,7 +263,6 @@ export const Bank = () => {
         variant="contained"
         size="small"
         startIcon={<AddIcon />}
-        onClick={handleCreateChest}
       ><Trans>bank.formChest.create</Trans></Button>
     </Grid>
 
@@ -274,7 +275,7 @@ export const Bank = () => {
       {currentMsg}
     </Grid>
 
-  </Grid>;
+  </Grid></form>;
 
   let content = <div></div>;
   if(qry.loading) {

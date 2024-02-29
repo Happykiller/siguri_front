@@ -67,9 +67,16 @@ export class GetThingsUsecase {
         data: response.data.thingsForChest
       }
     } catch (e: any) {
-      return {
-        message: CODES.GET_THINGS_FAIL,
-        error: e.message
+      if(e.message in CODES) {
+        return {
+          message: e.message,
+          error: e.message
+        }
+      } else {
+        return {
+          message: CODES.GET_THINGS_FAIL,
+          error: e.message
+        }
       }
     }
   }

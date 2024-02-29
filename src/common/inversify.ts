@@ -11,6 +11,7 @@ import { GraphqlServiceFake } from '@service/graphql/graphql.service.fake';
 import { GraphqlServiceFetch } from '@service/graphql/graphql.service.fetch';
 import { SessionInfoUsecase } from '@usecase/sessionInfo/systemInfo.usecase';
 import { CreateChestUsecase } from '@usecase/createChest/createChest.usecase';
+import { CreateThingUsecase } from '@usecase/createThing/createThing.usecase';
 import { GeneratePasswordUsecase } from '@usecase/generatePassword/generatePassword.usecase';
 
 export class Inversify {
@@ -23,6 +24,7 @@ export class Inversify {
   getThingsUsecase: GetThingsUsecase;
   systemInfoUsecase: SystemInfoUsecase;
   createChestUsecase: CreateChestUsecase;
+  createThingUsecase: CreateThingUsecase;
   generatePasswordUsecase: GeneratePasswordUsecase;
 
   constructor() {
@@ -34,6 +36,7 @@ export class Inversify {
     this.getThingsUsecase = new GetThingsUsecase(this);
     this.getChestsUsecase = new GetChestsUsecase(this);
     this.systemInfoUsecase = new SystemInfoUsecase(this);
+    this.createThingUsecase= new CreateThingUsecase(this);
     this.createChestUsecase = new CreateChestUsecase(this);
     this.generatePasswordUsecase = new GeneratePasswordUsecase(this);
 

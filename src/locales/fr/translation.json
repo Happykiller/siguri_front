@@ -17,8 +17,31 @@
     "settings": "Réglages"
   },
   "chest": {
-    "secret": "Entrer la clé",
-    "submit": "Entrer"
+    "secret": "Insérer la clé",
+    "submit": "Entrer",
+    "keyoff": "Retirer la clé",
+    "GET_CHEST_USECASE_WRONG_SECRET": "Mauvaise clé",
+    "newThing": "Nouveau",
+    "copy": {
+      "credential": {
+        "id": "Identifiant copié",
+        "password": "Mot de passe copié",
+        "address": "Adresse copié"
+      },
+      "cb": {
+        "number": "Numéro copié",
+        "code": "Code copié",
+        "crypto": "Crypto copié",
+        "label": "Nom copié",
+        "expiration_date": "Date d'expiration copié"
+      }, 
+      "code": {
+        "code": "Code copié"
+      }, 
+      "note": {
+        "note": "Note copié"
+      }
+    }
   },
   "common": {
     "done": "Valider",
@@ -55,5 +78,27 @@
     "FAIL": "Echec de la génération",
     "generated": "Mot de passe : ",
     "sucess": "Généré avec succès"
+  },
+  "thing": {
+    "submit": "Créer",
+    "label": "Entrer un nom",
+    "description": "Entrer une description",
+    "type": "Choisir le type",
+    "typeNone": "Aucune",
+    "code": "Entrer votre code",
+    "note": "Saisir votre note",
+    "login": "Entrer votre identifiant",
+    "password": "Entrer votre mot de passe",
+    "address": "Entrer l'adresse",
+    "number": "Entrer votre numéro",
+    "crypto": "Entrer votre cryptograme",
+    "cbName": "Entrer le nom",
+    "expirationDate": "Date d'expiration"
+  },
+  "thingType": {
+    "CB": "CB",
+    "CODE": "Code",
+    "NOTE": "Note",
+    "CREDENTIAL": "Identifiants"
   }
 }
