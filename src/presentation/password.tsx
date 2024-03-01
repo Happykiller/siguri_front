@@ -37,6 +37,7 @@ export const Password = () => {
           ...qry,
           data: response.data.password
         }));
+        navigator.clipboard.writeText(response.data.password);
         flash.open(t('password.sucess'));
       } else {
         inversify.loggerService.debug(response.error);
@@ -117,7 +118,7 @@ export const Password = () => {
                 }} 
               />
             } 
-            label="Label" 
+            label={<Trans>password.specials</Trans>}
           />
         </Grid>
 
@@ -139,36 +140,38 @@ export const Password = () => {
   }
 
   return (
-    <div>
+    <div className="app">
       <Bar/>
-      <div className="container">
-        <div className='title'>
-          <Trans>password.title</Trans>
-        </div>
-        <div>
-          <Grid 
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-          >
-            {/* Form */}
+      <div className="parent_container">
+        <div className="container">
+          <div className='title'>
+            <Trans>password.title</Trans>
+          </div>
+          <div>
             <Grid 
-              xs={12}
-              item
-              textAlign='center'
+              container
+              rowSpacing={1}
+              columnSpacing={{ xs: 1, sm: 2, md: 3 }}
             >
-              {form}
-            </Grid>
+              {/* Form */}
+              <Grid 
+                xs={12}
+                item
+                textAlign='center'
+              >
+                {form}
+              </Grid>
 
-            {/* Message */}
-            <Grid 
-              xs={12}
-              item
-              textAlign='center'
-            >
-              {message}
+              {/* Message */}
+              <Grid 
+                xs={12}
+                item
+                textAlign='center'
+              >
+                {message}
+              </Grid>
             </Grid>
-          </Grid>
+          </div>
         </div>
       </div>
       <Footer />

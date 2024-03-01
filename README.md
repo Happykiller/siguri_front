@@ -1,5 +1,5 @@
-# Seguri_front
-Front for service Seguri
+# Siguri_front
+Front for service Siguri
 
 ## MEP
 

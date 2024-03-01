@@ -30,7 +30,7 @@ const contextPersist = persist<ContextStoreModel>(
   }),
   {
     name: "siguri-storage",
-    storage: createJSONStorage(() => sessionStorage),
+    storage: createJSONStorage(() => localStorage),
   }
 );
 

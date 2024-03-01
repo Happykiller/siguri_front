@@ -7,6 +7,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import '@src/i18n';
 import '@src/index.scss';
 import Flash from '@presentation/flash';
+import { CGU } from '@presentation/cgu';
 import { Home } from '@presentation/home';
 import { Bank } from '@presentation/bank';
 import { Thing } from '@presentation/thing';
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: "/thing",
     element: <Guard><Thing /></Guard>,
+  },
+  {
+    path: "/CGU",
+    element: <CGU />,
   },
 ]);
 

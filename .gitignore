@@ -6,3 +6,4 @@ coverage
 dist
 .idea
 .env.local
+siguri_front.tar

@@ -77,7 +77,8 @@
     "generate": "Générer",
     "FAIL": "Echec de la génération",
     "generated": "Mot de passe : ",
-    "sucess": "Généré avec succès"
+    "sucess": "Généré avec succès et copié",
+    "specials": "Caractères spéciaux"
   },
   "thing": {
     "submit": "Créer",
@@ -93,7 +94,9 @@
     "number": "Entrer votre numéro",
     "crypto": "Entrer votre cryptograme",
     "cbName": "Entrer le nom",
-    "expirationDate": "Date d'expiration"
+    "expirationDate": "Date d'expiration",
+    "CREATE_THING_FAIL": "Erreur lors de la création",
+    "created": "Création réussi"
   },
   "thingType": {
     "CB": "CB",

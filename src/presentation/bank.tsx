@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import LoginIcon from '@mui/icons-material/Login';
 import { Trans, useTranslation } from 'react-i18next';
 import { createSearchParams, useNavigate } from "react-router-dom";
-import { Box, Button, Grid, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from '@mui/material';
+import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
 import Bar from '@presentation/bar';
@@ -118,11 +118,12 @@ export const Bank = () => {
     });
   }
 
-  const defaultContent = <div><Box 
+  const defaultContent = <div><Grid 
+    container
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
     sx={{
-      display: 'flex',
-      alignItems: 'flex-center',
-      flexDirection: 'column',
       p: 1,
       m: 1,
     }}
@@ -137,42 +138,114 @@ export const Bank = () => {
       startIcon={<AddIcon />}
       onClick={handleOpenFormChest}
     ><Trans>bank.createChest</Trans></Button>
-  </Box>
-  <TableContainer component={Paper}>
-  <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-    <TableHead>
-      <TableRow>
-        <TableCell>Label</TableCell>
-        <TableCell>Auteur</TableCell>
-        <TableCell>Description</TableCell>
-        <TableCell></TableCell>
-      </TableRow>
-    </TableHead>
-    <TableBody>
-      {chests?.map((chest) => (
-        <TableRow
-          key={chest.id}
-          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+  </Grid>
+
+  {/* Table */}
+  <Grid
+    container
+  >
+    <Grid
+      container
+      sx={{
+        color: "#000000",
+        fontWeight: "bold",
+        backgroundColor: "#BB86FC",
+        borderRadius: "5px 5px 0px 0px",
+        fontSize: "0.875rem"
+      }}
+    >
+      <Grid 
+        xs={3}
+        item
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        Label
+      </Grid>
+      <Grid 
+        xs={3}
+        item
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        Auteur
+      </Grid>
+      <Grid 
+        xs={3}
+        item
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        Description
+      </Grid>
+      <Grid>
+      </Grid>
+    </Grid>
+    
+    {chests?.map((chest) => (
+      <Grid
+        key={chest.id}
+        container
+        sx={{
+          backgroundColor: '#1A2027'
+        }}
+      >
+        <Grid 
+          xs={3}
+          item
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          title={chest.label}
         >
-          <TableCell component="th" scope="row">{chest.label}</TableCell>
-          <TableCell>{chest.author.code}</TableCell>
-          <TableCell>{chest.description}</TableCell>
-          <TableCell>
-            <IconButton onClick={(e) => {
-              e.preventDefault();
-              joinChest({
-                chest_id: chest.id,
-                label: chest.label
-              })
-            }}>
-              <LoginIcon />
-            </IconButton>
-          </TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-</TableContainer>
+          <Typography noWrap>{chest.label}</Typography>
+        </Grid>
+        <Grid 
+          xs={3}
+          item
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          title={chest.author.code}
+        >
+          <Typography noWrap>{chest.author.code}</Typography>
+        </Grid>
+        <Grid 
+          xs={3}
+          item
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          title={chest.description}
+        >
+          <Typography noWrap>{chest.description}</Typography>
+        </Grid>
+        <Grid
+          xs={3}
+          item
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <IconButton 
+            title="Entrer dans le coffre"
+            onClick={(e) => {
+            e.preventDefault();
+            joinChest({
+              chest_id: chest.id,
+              label: chest.label
+            })
+          }}>
+            <LoginIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
+    ))}
+
+  </Grid>
 </div>
 ;
 
@@ -292,17 +365,19 @@ export const Bank = () => {
   }
   
   return (
-    <div>
+    <div className="app">
       <Bar/>
-      <div className="container">
-        <div className='title'>
-          <Trans>bank.title</Trans>
-        </div>
-        <div>
-          {content}
-        </div>
-        <div>
-          {errorMessage}
+      <div className="parent_container">
+        <div className="container">
+          <div className='title'>
+            <Trans>bank.title</Trans>
+          </div>
+          <div>
+            {content}
+          </div>
+          <div>
+            {errorMessage}
+          </div>
         </div>
       </div>
       <Footer />

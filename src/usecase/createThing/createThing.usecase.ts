@@ -22,7 +22,9 @@ export class CreateThingUsecase {
             $chest_secret: String!, 
             $type: String!,
             $code: CreateThingCodeResolverDto, 
-            $note: CreateThingNoteResolverDto
+            $note: CreateThingNoteResolverDto, 
+            $cb: CreateThingCbResolverDto, 
+            $credential: CreateThingCredentialResolverDto
           ) {
             create_thing (
               dto: {
@@ -33,6 +35,8 @@ export class CreateThingUsecase {
                 type: $type
                 code: $code 
                 note: $note
+                cb: $cb
+                credential: $credential
               }
             ) {
               id
@@ -76,12 +80,19 @@ export class CreateThingUsecase {
 
       return {
         message: CODES.SUCCESS,
-        data: response.data.create_chest
+        data: response.data.create_thing
       }
     } catch (e: any) {
-      return {
-        message: CODES.CREATE_CHEST_FAIL,
-        error: e.message
+      if(e.message in CODES) {
+        return {
+          message: e.message,
+          error: e.message
+        }
+      } else {
+        return {
+          message: CODES.CREATE_THING_FAIL,
+          error: e.message
+        }
       }
     }
   }

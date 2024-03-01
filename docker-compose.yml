@@ -2,8 +2,8 @@
 version: '3.8'
 
 services:
-  seguri_front:
-    container_name: seguri_front
+  siguri_front:
+    container_name: siguri_front
     build:
       dockerfile: Dockerfile
     ports:

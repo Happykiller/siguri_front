@@ -1,7 +1,7 @@
 {
-  "name": "seguri_front",
-  "version": "0.2.0",
-  "description": "Front for service Seguri",
+  "name": "siguri_front",
+  "version": "0.3.0",
+  "description": "Front for service Siguri",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.dev.config.js --mode development --open --hot",
     "build": "webpack --config ./webpack.prod.config.js --mode production"
@@ -13,7 +13,6 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.10",
-    "@mui/x-date-pickers": "^6.19.5",
     "@types/eslint": "^8.56.3",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.2.58",
@@ -21,7 +20,6 @@
     "auto-zustand-selectors-hook": "^2.0.0",
     "axios": "^1.6.7",
     "css-loader": "^6.10.0",
-    "dayjs": "^1.11.10",
     "dotenv": "^16.4.5",
     "file-loader": "^6.2.0",
     "graphql": "^16.8.1",
