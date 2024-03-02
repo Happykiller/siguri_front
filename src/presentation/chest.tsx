@@ -103,8 +103,9 @@ export const Chest = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            title={thing.credential.id}
           >
-            {thing.credential.id}
+            <Typography noWrap>{thing.credential.id}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
@@ -127,8 +128,9 @@ export const Chest = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            title={thing.credential.password}
           >
-            {thing.credential.password}
+            <Typography noWrap>{thing.credential.password}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
@@ -151,8 +153,9 @@ export const Chest = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            title={thing.credential.address}
           >
-            {thing.credential.address}
+            <Typography noWrap>{thing.credential.address}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
@@ -191,8 +194,9 @@ export const Chest = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            title={thing.cb.number}
           >
-            {thing.cb.number}
+            <Typography noWrap>{thing.cb.number}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
@@ -214,8 +218,9 @@ export const Chest = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            title={thing.cb.code}
           >
-            {thing.cb.code}
+            <Typography noWrap>{thing.cb.code}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
@@ -237,8 +242,9 @@ export const Chest = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            title={thing.cb.crypto}
           >
-            {thing.cb.crypto}
+            <Typography noWrap>{thing.cb.crypto}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
@@ -260,8 +266,9 @@ export const Chest = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            title={thing.cb.label}
           >
-            {thing.cb.label}
+            <Typography noWrap>{thing.cb.label}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
@@ -283,8 +290,9 @@ export const Chest = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            title={thing.cb.expiration_date}
           >
-            {thing.cb.expiration_date}
+            <Typography noWrap>{thing.cb.expiration_date}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
@@ -313,8 +321,9 @@ export const Chest = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            title={thing.code.code}
           >
-            {thing.code.code}
+            <Typography noWrap>{thing.code.code}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
@@ -342,8 +351,9 @@ export const Chest = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
+            title={thing.note.note}
           >
-            {thing.note.note}
+            <Typography noWrap>{thing.note.note}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
@@ -378,7 +388,8 @@ export const Chest = () => {
         }}
       >
         <Grid 
-          xs={3}
+          xs={4}
+          md={3}
           item
           display="flex"
           justifyContent="center"
@@ -393,7 +404,8 @@ export const Chest = () => {
           <Typography noWrap>{thing.label}</Typography>
         </Grid>
         <Grid 
-          xs={3}
+          xs={2}
+          md={1}
           item
           display="flex"
           justifyContent="center"
@@ -403,7 +415,8 @@ export const Chest = () => {
           <Typography noWrap>{thing.author.code}</Typography>
         </Grid>
         <Grid 
-          xs={3}
+          xs={5}
+          md={7}
           item
           display="flex"
           justifyContent="center"
@@ -413,7 +426,8 @@ export const Chest = () => {
           <Typography noWrap>{thing.description}</Typography>
         </Grid>
         <Grid 
-          xs={3}
+          xs={1}
+          md={1}
           item
           display="flex"
           justifyContent="center"
@@ -610,7 +624,8 @@ export const Chest = () => {
           }}
         >
           <Grid 
-            xs={3}
+            xs={4}
+            md={3}
             item
             display="flex"
             justifyContent="center"
@@ -619,7 +634,8 @@ export const Chest = () => {
             Label
           </Grid>
           <Grid 
-            xs={3}
+            xs={2}
+            md={1}
             item
             display="flex"
             justifyContent="center"
@@ -628,7 +644,8 @@ export const Chest = () => {
             Auteur
           </Grid>
           <Grid 
-            xs={3}
+            xs={5}
+            md={7}
             item
             display="flex"
             justifyContent="center"
@@ -636,7 +653,10 @@ export const Chest = () => {
           >
             Description
           </Grid>
-          <Grid>
+          <Grid
+            xs={1}
+            md={1}
+            item>
           </Grid>
         </Grid>
 

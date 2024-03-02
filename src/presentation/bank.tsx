@@ -164,7 +164,7 @@ export const Bank = () => {
         Label
       </Grid>
       <Grid 
-        xs={3}
+        xs={2}
         item
         display="flex"
         justifyContent="center"
@@ -172,16 +172,19 @@ export const Bank = () => {
       >
         Auteur
       </Grid>
-      <Grid 
-        xs={3}
+      <Grid
         item
+        xs={6}
         display="flex"
         justifyContent="center"
         alignItems="center"
       >
         Description
       </Grid>
-      <Grid>
+      <Grid
+        item
+        xs={1}
+      >
       </Grid>
     </Grid>
     
@@ -204,7 +207,7 @@ export const Bank = () => {
           <Typography noWrap>{chest.label}</Typography>
         </Grid>
         <Grid 
-          xs={3}
+          xs={2}
           item
           display="flex"
           justifyContent="center"
@@ -214,8 +217,8 @@ export const Bank = () => {
           <Typography noWrap>{chest.author.code}</Typography>
         </Grid>
         <Grid 
-          xs={3}
           item
+          xs={6}
           display="flex"
           justifyContent="center"
           alignItems="center"
@@ -224,7 +227,7 @@ export const Bank = () => {
           <Typography noWrap>{chest.description}</Typography>
         </Grid>
         <Grid
-          xs={3}
+          xs={1}
           item
           display="flex"
           justifyContent="center"

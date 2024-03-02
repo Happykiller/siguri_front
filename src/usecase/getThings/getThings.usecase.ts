@@ -1,5 +1,6 @@
 import { CODES } from '@src/common/codes';
 import { Inversify } from '@src/common/inversify';
+import { ThingUsecaseModel } from '@usecase/model/thing.usecase.model';
 import { GetThingsUsecaseDto } from '@usecase/getThings/getThings.usecase.dto';
 import { GetThingsUsecaseModel } from '@usecase/getThings/getThings.usecase.model';
 
@@ -64,7 +65,7 @@ export class GetThingsUsecase {
 
       return {
         message: CODES.SUCCESS,
-        data: response.data.thingsForChest
+        data: response.data.thingsForChest.sort((elt1:ThingUsecaseModel, elt2:ThingUsecaseModel) => elt1.label.localeCompare(elt2.label))
       }
     } catch (e: any) {
       if(e.message in CODES) {
