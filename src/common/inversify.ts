@@ -2,6 +2,7 @@ import config from '@src/config/';
 import { AuthUsecase } from '@usecase/auth/auth.usecase';
 import LoggerService from '@service/logger/logger.service';
 import GraphqlService from '@service/graphql/graphql.service';
+import { GetThingUsecase } from '@usecase/getThing/getThing.usecase';
 import { GetChestUsecase } from '@usecase/getChest/getChest.usecase';
 import { SystemInfoUsecase } from '@usecase/system/systemInfo.usecase';
 import { GetChestsUsecase } from '@usecase/getChests/getChests.usecase';
@@ -12,6 +13,8 @@ import { GraphqlServiceFetch } from '@service/graphql/graphql.service.fetch';
 import { SessionInfoUsecase } from '@usecase/sessionInfo/systemInfo.usecase';
 import { CreateChestUsecase } from '@usecase/createChest/createChest.usecase';
 import { CreateThingUsecase } from '@usecase/createThing/createThing.usecase';
+import { UpdateThingUsecase } from '@usecase/updateThing/updateThing.usecase';
+import { DeleteThingUsecase } from '@usecase/deleteThing/deleteThing.usecase';
 import { GeneratePasswordUsecase } from '@usecase/generatePassword/generatePassword.usecase';
 
 export class Inversify {
@@ -19,12 +22,15 @@ export class Inversify {
   loggerService: LoggerService;
   graphqlService: GraphqlService;
   sessionInfo: SessionInfoUsecase;
+  getThingUsecase: GetThingUsecase;
   getChestUsecase: GetChestUsecase;
   getChestsUsecase: GetChestsUsecase;
   getThingsUsecase: GetThingsUsecase;
   systemInfoUsecase: SystemInfoUsecase;
   createChestUsecase: CreateChestUsecase;
   createThingUsecase: CreateThingUsecase;
+  deleteThingUsecase: DeleteThingUsecase;
+  updateThingUsecase: UpdateThingUsecase;
   generatePasswordUsecase: GeneratePasswordUsecase;
 
   constructor() {
@@ -33,11 +39,14 @@ export class Inversify {
     this.loggerService = new LoggerServiceReal();
     this.sessionInfo = new SessionInfoUsecase(this);
     this.getChestUsecase = new GetChestUsecase(this);
+    this.getThingUsecase = new GetThingUsecase(this);
     this.getThingsUsecase = new GetThingsUsecase(this);
     this.getChestsUsecase = new GetChestsUsecase(this);
     this.systemInfoUsecase = new SystemInfoUsecase(this);
-    this.createThingUsecase= new CreateThingUsecase(this);
+    this.createThingUsecase = new CreateThingUsecase(this);
+    this.updateThingUsecase = new UpdateThingUsecase(this);
     this.createChestUsecase = new CreateChestUsecase(this);
+    this.deleteThingUsecase = new DeleteThingUsecase(this);
     this.generatePasswordUsecase = new GeneratePasswordUsecase(this);
 
     // Services

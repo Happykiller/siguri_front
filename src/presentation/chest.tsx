@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Key } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import NotesIcon from '@mui/icons-material/Notes';
 import KeyOffIcon from '@mui/icons-material/KeyOff';
 import { Trans, useTranslation } from 'react-i18next';
@@ -11,8 +12,8 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { Button, Grid, IconButton, TextField, Tooltip, Typography } from '@mui/material';
 import { useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
+import { Button, Grid, IconButton, TextField, Tooltip, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
 import Bar from '@presentation/bar';
@@ -83,6 +84,17 @@ export const Chest = () => {
     });
   }
 
+  const editThing = async (dto: {thing_id: string}) => {
+    navigate({
+      pathname: '/edit_thing',
+      search: createSearchParams({
+        chest_id: searchParams.get('chest_id'),
+        chest_label: searchParams.get('chest_label'),
+        thing_id: dto.thing_id
+      }).toString()
+    });
+  }
+
   const copy = (dto: { value: string, type: string}) => {
     navigator.clipboard.writeText(dto.value);
     flash.open(t(`chest.copy.${dto.type}`));
@@ -100,7 +112,7 @@ export const Chest = () => {
             xs={6}
             md={4}
             item
-            display="flex"
+            display={(thing.credential.id) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
             title={thing.credential.id}
@@ -125,7 +137,7 @@ export const Chest = () => {
             xs={6}
             md={4}
             item
-            display="flex"
+            display={(thing.credential.password) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
             title={thing.credential.password}
@@ -150,7 +162,7 @@ export const Chest = () => {
             xs={12}
             md={4}
             item
-            display="flex"
+            display={(thing.credential.address) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
             title={thing.credential.address}
@@ -191,7 +203,7 @@ export const Chest = () => {
           <Grid 
             xs={6}
             item
-            display="flex"
+            display={(thing.cb.number) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
             title={thing.cb.number}
@@ -215,7 +227,7 @@ export const Chest = () => {
           <Grid 
             xs={3}
             item
-            display="flex"
+            display={(thing.cb.code) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
             title={thing.cb.code}
@@ -239,7 +251,7 @@ export const Chest = () => {
           <Grid 
             xs={3}
             item
-            display="flex"
+            display={(thing.cb.crypto) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
             title={thing.cb.crypto}
@@ -263,7 +275,7 @@ export const Chest = () => {
           <Grid 
             xs={8}
             item
-            display="flex"
+            display={(thing.cb.label) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
             title={thing.cb.label}
@@ -287,7 +299,7 @@ export const Chest = () => {
           <Grid 
             xs={4}
             item
-            display="flex"
+            display={(thing.cb.expiration_date) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
             title={thing.cb.expiration_date}
@@ -318,7 +330,7 @@ export const Chest = () => {
           <Grid 
             xs={12}
             item
-            display="flex"
+            display={(thing.code.code) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
             title={thing.code.code}
@@ -348,7 +360,7 @@ export const Chest = () => {
           <Grid 
             xs={12}
             item
-            display="flex"
+            display={(thing.note.note) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
             title={thing.note.note}
@@ -435,7 +447,8 @@ export const Chest = () => {
         >
           <IconButton
             size="small"
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               if (!openRowChild) {
                 setOpenRowChild({
                   thing_id: thing.id 
@@ -446,6 +459,17 @@ export const Chest = () => {
             }}
           >
             {openRowChild ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+          <IconButton
+            size="small"
+            onClick={(e) => {
+              e.preventDefault();
+              editThing({
+                thing_id: thing.id
+              })
+            }}
+          >
+            <EditIcon/>
           </IconButton>
         </Grid>
         <Grid 
@@ -580,6 +604,9 @@ export const Chest = () => {
   } else {
     content = <Grid 
       container
+      sx={{
+        minWidth: "400px"
+      }}
     >
       <Grid 
         container
@@ -676,7 +703,7 @@ export const Chest = () => {
           <div className='title'>
             {searchParams.get('chest_label')}
           </div>
-          {content}
+            {content}
           <div>
             {errorMessage}
           </div>

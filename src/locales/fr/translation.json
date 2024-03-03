@@ -103,5 +103,11 @@
     "CODE": "Code",
     "NOTE": "Note",
     "CREDENTIAL": "Identifiants"
+  },
+  "editThing": {
+    "update": "Mettre à jour",
+    "delete": "Supprimer",
+    "updated": "Mise à jour réussi",
+    "deleted": "Suppression réussi"
   }
 }

@@ -143,6 +143,9 @@ export const Bank = () => {
   {/* Table */}
   <Grid
     container
+    sx={{
+      minWidth: "400px"
+    }}
   >
     <Grid
       container
