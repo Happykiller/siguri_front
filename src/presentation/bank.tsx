@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import LoginIcon from '@mui/icons-material/Login';
 import { Trans, useTranslation } from 'react-i18next';
 import { createSearchParams, useNavigate } from "react-router-dom";
-import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Button, Grid, IconButton, TextField, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
 import Bar from '@presentation/bar';
