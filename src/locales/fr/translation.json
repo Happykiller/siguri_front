@@ -22,6 +22,7 @@
     "keyoff": "Retirer la clé",
     "GET_CHEST_USECASE_WRONG_SECRET": "Mauvaise clé",
     "newThing": "Nouveau",
+    "export": "Exporter",
     "copy": {
       "credential": {
         "id": "Identifiant copié",

@@ -22,6 +22,7 @@ import { Footer } from '@presentation/footer';
 import inversify from '@src/common/inversify';
 import { THING_TYPES } from '@src/common/thingTypes';
 import { FlashStore, flashStore} from '@presentation/flash';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { ThingUsecaseModel } from '@usecase/model/thing.usecase.model';
 import { ContextStoreModel, contextStore } from '@presentation/contextStore';
 import { GetThingsUsecaseModel } from '@usecase/getThings/getThings.usecase.model';
@@ -41,6 +42,17 @@ export const Chest = () => {
     data: null,
     error: null
   });
+  
+  const exportData = () => {
+    const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+      JSON.stringify(things)
+    )}`;
+    const link = document.createElement("a");
+    link.href = jsonString;
+    link.download = "data.json";
+
+    link.click();
+  };
 
   const handleSetSecret = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -605,7 +617,7 @@ export const Chest = () => {
     content = <Grid 
       container
       sx={{
-        minWidth: "400px"
+        minWidth: "350px"
       }}
     >
       <Grid 
@@ -619,7 +631,6 @@ export const Chest = () => {
           sx={{
             m: 1
           }}
-          type="submit"
           variant="contained"
           size="small"
           startIcon={<KeyOffIcon />}
@@ -629,12 +640,20 @@ export const Chest = () => {
           sx={{
             m: 1
           }}
-          type="submit"
           variant="contained"
           size="small"
           startIcon={<AddIcon />}
           onClick={newThing}
         ><Trans>chest.newThing</Trans></Button>
+        <Button 
+          sx={{
+            m: 1
+          }}
+          variant="contained"
+          size="small"
+          startIcon={<FileUploadIcon />}
+          onClick={exportData}
+        ><Trans>chest.export</Trans></Button>
       </Grid>
 
       {/* Table */}
