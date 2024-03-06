@@ -255,7 +255,12 @@ export const EditThing = () => {
           display={thing.type !== THING_TYPES.NOTE ? "none" : "flex"}
         >
           <TextField
-            sx={{ marginRight:1 }}
+            multiline
+            rows={4}
+            sx={{ 
+              marginRight:1,
+              width: '300px'
+            }}
             label={<Trans>thing.note</Trans>}
             variant="standard"
             size="small"

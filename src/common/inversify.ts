@@ -8,6 +8,8 @@ import { SystemInfoUsecase } from '@usecase/system/systemInfo.usecase';
 import { GetChestsUsecase } from '@usecase/getChests/getChests.usecase';
 import { LoggerServiceReal } from '@service/logger/logger.service.real';
 import { GetThingsUsecase } from '@usecase/getThings/getThings.usecase';
+import { JoinChestUsecase } from '@usecase/joinChest/joinChest.usecase';
+import { LeaveChestUsecase } from '@usecase/leaveChest/leaveChest.usecase';
 import { GraphqlServiceFake } from '@service/graphql/graphql.service.fake';
 import { GraphqlServiceFetch } from '@service/graphql/graphql.service.fetch';
 import { SessionInfoUsecase } from '@usecase/sessionInfo/systemInfo.usecase';
@@ -26,6 +28,8 @@ export class Inversify {
   getChestUsecase: GetChestUsecase;
   getChestsUsecase: GetChestsUsecase;
   getThingsUsecase: GetThingsUsecase;
+  joinChestUsecase: JoinChestUsecase;
+  leaveChestUsecase: LeaveChestUsecase;
   systemInfoUsecase: SystemInfoUsecase;
   createChestUsecase: CreateChestUsecase;
   createThingUsecase: CreateThingUsecase;
@@ -42,6 +46,8 @@ export class Inversify {
     this.getThingUsecase = new GetThingUsecase(this);
     this.getThingsUsecase = new GetThingsUsecase(this);
     this.getChestsUsecase = new GetChestsUsecase(this);
+    this.joinChestUsecase = new JoinChestUsecase(this);
+    this.leaveChestUsecase = new LeaveChestUsecase(this);
     this.systemInfoUsecase = new SystemInfoUsecase(this);
     this.createThingUsecase = new CreateThingUsecase(this);
     this.updateThingUsecase = new UpdateThingUsecase(this);

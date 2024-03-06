@@ -10,6 +10,7 @@ import PasswordIcon from '@mui/icons-material/Password';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
@@ -26,6 +27,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { ThingUsecaseModel } from '@usecase/model/thing.usecase.model';
 import { ContextStoreModel, contextStore } from '@presentation/contextStore';
 import { GetThingsUsecaseModel } from '@usecase/getThings/getThings.usecase.model';
+import { LeaveChestUsecaseModel } from '@usecase/leaveChest/leaveChest.usecase.model';
 
 export const Chest = () => {
   const { t } = useTranslation();
@@ -83,6 +85,42 @@ export const Chest = () => {
     });
     navigate({
       pathname: '/bank'
+    });
+  }
+
+  const leave = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    setQry(qry => ({
+      ...qry,
+      loading: true
+    }));
+    inversify.leaveChestUsecase.execute({
+      chest_id: searchParams.get('chest_id')
+    }).then((response:LeaveChestUsecaseModel) => {
+      if(response.message === CODES.SUCCESS) {
+        flash.open(t('chest.leaved'));
+        navigate({
+          pathname: '/bank'
+        });
+      } else {
+        inversify.loggerService.debug(response.error);
+        setQry(qry => ({
+          ...qry,
+          error: response.message
+        }));
+      }
+    })
+    .catch((error:any) => {
+      setQry(qry => ({
+        ...qry,
+        error: error.message
+      }));
+    })
+    .finally(() => {
+      setQry(qry => ({
+        ...qry,
+        loading: false
+      }));
     });
   }
 
@@ -377,7 +415,11 @@ export const Chest = () => {
             alignItems="center"
             title={thing.note.note}
           >
-            <Typography noWrap>{thing.note.note}</Typography>
+            <Typography 
+              sx={{
+                'white-space': 'pre-wrap'
+              }}
+            >{thing.note.note}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
@@ -633,15 +675,6 @@ export const Chest = () => {
           }}
           variant="contained"
           size="small"
-          startIcon={<KeyOffIcon />}
-          onClick={keyOff}
-        ><Trans>chest.keyoff</Trans></Button>
-        <Button 
-          sx={{
-            m: 1
-          }}
-          variant="contained"
-          size="small"
           startIcon={<AddIcon />}
           onClick={newThing}
         ><Trans>chest.newThing</Trans></Button>
@@ -650,10 +683,32 @@ export const Chest = () => {
             m: 1
           }}
           variant="contained"
+          color='info'
           size="small"
           startIcon={<FileUploadIcon />}
           onClick={exportData}
         ><Trans>chest.export</Trans></Button>
+        <Button 
+          sx={{
+            m: 1
+          }}
+          variant="contained"
+          size="small"
+          color='warning'
+          startIcon={<KeyOffIcon />}
+          onClick={keyOff}
+        ><Trans>chest.keyoff</Trans></Button>
+        <Button 
+          sx={{
+            m: 1
+          }}
+          variant="contained"
+          color='error'
+          size="small"
+          startIcon={<DeleteForeverIcon />}
+          title={t('chest.leaveTitle')}
+          onClick={leave}
+        ><Trans>chest.leave</Trans></Button>
       </Grid>
 
       {/* Table */}

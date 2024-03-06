@@ -2,6 +2,10 @@
   "bank": {
     "title": "La bank",
     "createChest": "Créer un coffre",
+    "copy": "Code du coffre copié : ",
+    "join": "Code coffre",
+    "joinTitle": "Rejoindre un coffre existant avec son code",
+    "joined": "Coffre rejoins",
     "formChest": {
       "create": "Créer",
       "label": "Label",
@@ -23,6 +27,9 @@
     "GET_CHEST_USECASE_WRONG_SECRET": "Mauvaise clé",
     "newThing": "Nouveau",
     "export": "Exporter",
+    "leave": "Abandonner",
+    "leaved": "Coffre abandonné",
+    "leaveTitle": "Ne plus voir le coffre",
     "copy": {
       "credential": {
         "id": "Identifiant copié",

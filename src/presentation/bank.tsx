@@ -1,9 +1,11 @@
 import * as React from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import LoginIcon from '@mui/icons-material/Login';
+import ShareIcon from '@mui/icons-material/Share';
 import { Trans, useTranslation } from 'react-i18next';
+import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import { createSearchParams, useNavigate } from "react-router-dom";
-import { Button, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Button, Divider, Grid, IconButton, InputBase, Paper, TextField, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
 import Bar from '@presentation/bar';
@@ -13,12 +15,14 @@ import inversify from '@src/common/inversify';
 import { FlashStore, flashStore} from '@presentation/flash';
 import { ChestUsecaseModel } from '@usecase/model/chest.usecase.model';
 import { GetChestsUsecaseModel } from '@usecase/getChests/getChests.usecase.model';
+import { JoinChestUsecaseModel } from '@usecase/joinChest/joinChest.usecase.model';
 import { CreateChestUsecaseModel } from '@usecase/createChest/createChest.usecase.model';
 
 export const Bank = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const flash:FlashStore = flashStore();
+  const [code, setCode] = React.useState('');
   const [chestKey, setChestKey] = React.useState('');
   const [chestDesc, setChestDesc] = React.useState('');
   const [currentMsg, setCurrentMsg] = React.useState('');
@@ -68,6 +72,40 @@ export const Bank = () => {
     setCurrentAction('createChest');
   }
 
+  const join = () => {
+    setQry(qry => ({
+      ...qry,
+      loading: true
+    }));
+    inversify.joinChestUsecase.execute({
+      chest_id: code
+    }).then((response:JoinChestUsecaseModel) => {
+      if(response.message === CODES.SUCCESS) {
+        flash.open(t('bank.joined'));
+        setChest(null);
+        setCode('');
+      } else {
+        inversify.loggerService.debug(response.error);
+        setQry(qry => ({
+          ...qry,
+          error: response.message
+        }));
+      }
+    })
+    .catch((error:any) => {
+      setQry(qry => ({
+        ...qry,
+        error: error.message
+      }));
+    })
+    .finally(() => {
+      setQry(qry => ({
+        ...qry,
+        loading: false
+      }));
+    });
+  }
+
   const joinChest = (dto:{
     chest_id: string,
     label: string
@@ -79,6 +117,14 @@ export const Bank = () => {
         chest_label: dto.label
       }).toString()
     });
+  }
+
+  const share = (dto:{
+    chest_id: string,
+    label: string
+  }) => {
+    navigator.clipboard.writeText(dto.chest_id);
+    flash.open(t(`bank.copy`)+dto.label);
   }
 
   const handleCreateChest = async (event: React.SyntheticEvent) => {
@@ -138,6 +184,34 @@ export const Bank = () => {
       startIcon={<AddIcon />}
       onClick={handleOpenFormChest}
     ><Trans>bank.createChest</Trans></Button>
+    <Paper
+      component="form"
+      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 200 }}
+    >
+      <InputBase
+        sx={{ ml: 1, flex: 1 }}
+        placeholder={t('bank.join')}
+        inputProps={{ 'aria-label': t('bank.join') }}
+        value={code}
+        onChange={(e) => { 
+          e.preventDefault();
+          setCode(e.target.value);
+        }}
+      />
+      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+      <IconButton 
+        color="primary" 
+        sx={{ p: '10px' }} 
+        title={t('bank.joinTitle')}
+        disabled={(code.length !== 24)}
+        onClick={(e) => {
+          e.preventDefault();
+          join()
+        }}
+      >
+        <AddToPhotosIcon />
+      </IconButton>
+    </Paper>
   </Grid>
 
   {/* Table */}
@@ -231,11 +305,25 @@ export const Bank = () => {
         </Grid>
         <Grid
           xs={1}
+          sx={{
+            paddingRight: '15px'
+          }}
           item
           display="flex"
           justifyContent="center"
           alignItems="center"
         >
+          <IconButton 
+            title="Entrer dans le coffre"
+            onClick={(e) => {
+            e.preventDefault();
+            share({
+              chest_id: chest.id,
+              label: chest.label
+            })
+          }}>
+            <ShareIcon />
+          </IconButton>
           <IconButton 
             title="Entrer dans le coffre"
             onClick={(e) => {

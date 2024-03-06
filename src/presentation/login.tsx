@@ -91,6 +91,7 @@ export const Login = () => {
         sx={{ marginRight:1}}
         label={<Trans>login.password</Trans>}
         variant="standard"
+        type="password"
         size="small"
         onChange={(e) => { 
           e.preventDefault();
