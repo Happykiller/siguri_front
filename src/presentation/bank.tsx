@@ -2,10 +2,11 @@ import * as React from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import LoginIcon from '@mui/icons-material/Login';
 import ShareIcon from '@mui/icons-material/Share';
+import GroupIcon from '@mui/icons-material/Group';
 import { Trans, useTranslation } from 'react-i18next';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import { createSearchParams, useNavigate } from "react-router-dom";
-import { Button, Divider, Grid, IconButton, InputBase, Paper, TextField, Typography } from '@mui/material';
+import { Button, Divider, Grid, IconButton, InputBase, Paper, TextField, Tooltip, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
 import Bar from '@presentation/bar';
@@ -14,6 +15,7 @@ import { Footer } from '@presentation/footer';
 import inversify from '@src/common/inversify';
 import { FlashStore, flashStore} from '@presentation/flash';
 import { ChestUsecaseModel } from '@usecase/model/chest.usecase.model';
+import { ContextStoreModel, contextStore } from '@presentation/contextStore';
 import { GetChestsUsecaseModel } from '@usecase/getChests/getChests.usecase.model';
 import { JoinChestUsecaseModel } from '@usecase/joinChest/joinChest.usecase.model';
 import { CreateChestUsecaseModel } from '@usecase/createChest/createChest.usecase.model';
@@ -23,6 +25,7 @@ export const Bank = () => {
   const navigate = useNavigate();
   const flash:FlashStore = flashStore();
   const [code, setCode] = React.useState('');
+  const context:ContextStoreModel = contextStore();
   const [chestKey, setChestKey] = React.useState('');
   const [chestDesc, setChestDesc] = React.useState('');
   const [currentMsg, setCurrentMsg] = React.useState('');
@@ -241,7 +244,7 @@ export const Bank = () => {
         Label
       </Grid>
       <Grid 
-        xs={2}
+        xs={1}
         item
         display="flex"
         justifyContent="center"
@@ -260,12 +263,13 @@ export const Bank = () => {
       </Grid>
       <Grid
         item
-        xs={1}
+        xs={2}
       >
       </Grid>
     </Grid>
     
-    {chests?.map((chest) => (
+    {chests?.map((chest) => {
+      return (
       <Grid
         key={chest.id}
         container
@@ -284,7 +288,7 @@ export const Bank = () => {
           <Typography noWrap>{chest.label}</Typography>
         </Grid>
         <Grid 
-          xs={2}
+          xs={1}
           item
           display="flex"
           justifyContent="center"
@@ -304,7 +308,7 @@ export const Bank = () => {
           <Typography noWrap>{chest.description}</Typography>
         </Grid>
         <Grid
-          xs={1}
+          xs={2}
           sx={{
             paddingRight: '15px'
           }}
@@ -313,8 +317,26 @@ export const Bank = () => {
           justifyContent="center"
           alignItems="center"
         >
+          {/* Other user ? */}
+          {
+            (chest.members.filter((member) => member.user_id !== context.id).length > 0)?
+              <Tooltip title={
+                <>
+                  {chest.members.filter((member) => member.user_id !== context.id).map((member) => {
+                    return <li key={member.user_id}>{member.user.code}</li>
+                  })}
+                </>
+              }>
+                <IconButton>
+                  <GroupIcon />
+                </IconButton>
+              </Tooltip>
+            :''
+          }
+
+          {/* Share  */}
           <IconButton 
-            title="Entrer dans le coffre"
+            title="Partager le coffre"
             onClick={(e) => {
             e.preventDefault();
             share({
@@ -324,6 +346,8 @@ export const Bank = () => {
           }}>
             <ShareIcon />
           </IconButton>
+
+          {/* Enter  */}
           <IconButton 
             title="Entrer dans le coffre"
             onClick={(e) => {
@@ -337,7 +361,7 @@ export const Bank = () => {
           </IconButton>
         </Grid>
       </Grid>
-    ))}
+    )})}
 
   </Grid>
 </div>

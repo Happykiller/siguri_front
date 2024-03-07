@@ -8,7 +8,6 @@ import '@src/i18n';
 import '@src/index.scss';
 import Flash from '@presentation/flash';
 import { CGU } from '@presentation/cgu';
-import { Home } from '@presentation/home';
 import { Bank } from '@presentation/bank';
 import { Thing } from '@presentation/thing';
 import { Login } from '@presentation/login';
@@ -20,7 +19,7 @@ import { EditThing } from '@presentation/edit_thing';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Guard><Home /></Guard>,
+    element: <Guard><Bank /></Guard>,
   },
   {
     path: "/login",

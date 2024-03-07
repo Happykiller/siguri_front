@@ -9,12 +9,14 @@ import KeyboardIcon from '@mui/icons-material/Keyboard';
 import PasswordIcon from '@mui/icons-material/Password';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
-import { Button, Grid, IconButton, TextField, Tooltip, Typography } from '@mui/material';
+import { Button, Grid, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
 import Bar from '@presentation/bar';
@@ -36,6 +38,7 @@ export const Chest = () => {
   const [searchParams] = useSearchParams();
   const context:ContextStoreModel = contextStore();
   const [openRowChild, setOpenRowChild] = React.useState(null);
+  const [secretVisible, setSecretVisible] = React.useState(false);
   const [things, setThings] = React.useState<ThingUsecaseModel[]>(null);
   const se = context.chests_secret?.find((elt) => elt.id === searchParams.get('chest_id'))?.secret ?? '';
   const [secretForm, setSecretForm] = React.useState(se);
@@ -550,7 +553,7 @@ export const Chest = () => {
     rowSpacing={1}
     columnSpacing={{ xs: 1, sm: 2, md: 3 }}
   >
-    {/* Field label */}
+    {/* Field secret */}
     <Grid 
       xs={12}
       item
@@ -559,15 +562,27 @@ export const Chest = () => {
       alignItems="center"
     >
       <TextField
-        sx={{ marginRight:1 }}
+        sx={{ marginRight:1}}
         label={<Trans>chest.secret</Trans>}
         variant="standard"
         size="small"
-        type='text'
-        value={secretForm}
+        type={(secretVisible)?'text':'password'}
         onChange={(e) => { 
           e.preventDefault();
           setSecretForm(e.target.value);
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment 
+              position="end"
+              onClick={(e) => { 
+                e.preventDefault();
+                setSecretVisible(!secretVisible);
+              }}
+            >
+              {(secretVisible?<VisibilityOffIcon/>:<VisibilityIcon />)}
+            </InputAdornment>
+          ),
         }}
       />
     </Grid>
