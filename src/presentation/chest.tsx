@@ -792,7 +792,7 @@ export const Chest = () => {
           <div className='title'>
             {searchParams.get('chest_label')}
           </div>
-            {content}
+          {content}
           <div>
             {errorMessage}
           </div>
