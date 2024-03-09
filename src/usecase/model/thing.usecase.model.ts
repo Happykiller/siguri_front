@@ -1,6 +1,6 @@
 import { UserUsecaseModel } from './user.usecase.model';
 
-export interface ThingUsecaseModel {
+export default interface ThingUsecaseModel {
   id: string;
   label: string;
   description?: string;

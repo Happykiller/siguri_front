@@ -1,4 +1,4 @@
-export interface UpdateThingUsecaseDto {
+export default interface UpdateThingUsecaseDto {
   id: string;
   label: string;
   description?: string;

@@ -1,3 +1,3 @@
-export interface LeaveChestUsecaseDto {
+export default interface LeaveChestUsecaseDto {
   chest_id: string;
 }

@@ -1,6 +1,6 @@
-import { ThingUsecaseModel } from '@usecase/model/thing.usecase.model';
+import ThingUsecaseModel from '@usecase/model/thing.usecase.model';
 
-export interface UpdateThingUsecaseModel {
+export default interface UpdateThingUsecaseModel {
   message: string;
   data?: ThingUsecaseModel,
   error?: string;

@@ -1,4 +1,4 @@
-import { ThingUsecaseModel } from '../model/thing.usecase.model';
+import ThingUsecaseModel from '@usecase/model/thing.usecase.model';
 
 export interface CreateThingUsecaseModel {
   message: string;

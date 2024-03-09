@@ -1,7 +1,7 @@
 import { CODES } from '@src/common/codes';
 import { Inversify } from '@src/common/inversify';
-import { DeleteThingUsecaseDto } from '@usecase/deleteThing/deleteThing.usecase.dto';
-import { DeleteThingUsecaseModel } from '@usecase/deleteThing/deleteThing.usecase.model';
+import DeleteThingUsecaseDto from '@usecase/deleteThing/deleteThing.usecase.dto';
+import DeleteThingUsecaseModel from '@usecase/deleteThing/deleteThing.usecase.model';
 
 export class DeleteThingUsecase {
 

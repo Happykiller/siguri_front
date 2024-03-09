@@ -13,6 +13,7 @@ import { Thing } from '@presentation/thing';
 import { Login } from '@presentation/login';
 import { Guard } from '@presentation/guard';
 import { Chest } from '@presentation/chest';
+import { Profile } from '@presentation/profile';
 import { Password } from '@presentation/password';
 import { EditThing } from '@presentation/edit_thing';
 
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
   {
     path: "/edit_thing",
     element: <Guard><EditThing /></Guard>,
+  },
+  {
+    path: "/profile",
+    element: <Guard><Profile /></Guard>,
   },
   {
     path: "/CGU",

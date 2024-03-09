@@ -1,7 +1,7 @@
 import { CODES } from '@src/common/codes';
 import { Inversify } from '@src/common/inversify';
-import { LeaveChestUsecaseDto } from '@usecase/leaveChest/leaveChest.usecase.dto';
-import { LeaveChestUsecaseModel } from '@usecase/leaveChest/leaveChest.usecase.model';
+import LeaveChestUsecaseDto from '@usecase/leaveChest/leaveChest.usecase.dto';
+import LeaveChestUsecaseModel from '@usecase/leaveChest/leaveChest.usecase.model';
 
 export class LeaveChestUsecase {
 

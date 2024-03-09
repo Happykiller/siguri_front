@@ -9,6 +9,7 @@ import KeyboardIcon from '@mui/icons-material/Keyboard';
 import PasswordIcon from '@mui/icons-material/Password';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -25,11 +26,10 @@ import { Footer } from '@presentation/footer';
 import inversify from '@src/common/inversify';
 import { THING_TYPES } from '@src/common/thingTypes';
 import { FlashStore, flashStore} from '@presentation/flash';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { ThingUsecaseModel } from '@usecase/model/thing.usecase.model';
+import ThingUsecaseModel from '@usecase/model/thing.usecase.model';
 import { ContextStoreModel, contextStore } from '@presentation/contextStore';
-import { GetThingsUsecaseModel } from '@usecase/getThings/getThings.usecase.model';
-import { LeaveChestUsecaseModel } from '@usecase/leaveChest/leaveChest.usecase.model';
+import GetThingsUsecaseModel from '@usecase/getThings/getThings.usecase.model';
+import LeaveChestUsecaseModel from '@usecase/leaveChest/leaveChest.usecase.model';
 
 export const Chest = () => {
   const { t } = useTranslation();
@@ -168,7 +168,7 @@ export const Chest = () => {
             display={(thing.credential.id) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
-            title={thing.credential.id}
+            title={t(`chest.credential.id`)+thing.credential.id}
           >
             <Typography noWrap>{thing.credential.id}</Typography>
             <IconButton
@@ -193,7 +193,7 @@ export const Chest = () => {
             display={(thing.credential.password) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
-            title={thing.credential.password}
+            title={t(`chest.credential.password`)+thing.credential.password}
           >
             <Typography noWrap>{thing.credential.password}</Typography>
             <IconButton
@@ -218,7 +218,7 @@ export const Chest = () => {
             display={(thing.credential.address) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
-            title={thing.credential.address}
+            title={t(`chest.credential.address`)+thing.credential.address}
           >
             <Typography noWrap>{thing.credential.address}</Typography>
             <IconButton
@@ -259,7 +259,7 @@ export const Chest = () => {
             display={(thing.cb.number) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
-            title={thing.cb.number}
+            title={t(`chest.cb.number`)+thing.cb.number}
           >
             <Typography noWrap>{thing.cb.number}</Typography>
             <IconButton
@@ -280,26 +280,26 @@ export const Chest = () => {
           <Grid 
             xs={3}
             item
-            display={(thing.cb.code) ? "flex" : "none"}
+            display={(thing.cb.expiration_date) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
-            title={thing.cb.code}
+            title={t(`chest.cb.expiration_date`)+thing.cb.expiration_date}
           >
-            <Typography noWrap>{thing.cb.code}</Typography>
+            <Typography noWrap>{thing.cb.expiration_date}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
               onClick={(e) => {
                 e.preventDefault();
                 copy({
-                  value: thing.cb.code,
-                  type: 'cb.code'
+                  value: thing.cb.expiration_date,
+                  type: 'cb.expiration_date'
                 })
               }}
             >
               <ContentCopyIcon />
             </IconButton>
-          </Grid>
+          </Grid>          
 
           <Grid 
             xs={3}
@@ -307,7 +307,7 @@ export const Chest = () => {
             display={(thing.cb.crypto) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
-            title={thing.cb.crypto}
+            title={t(`chest.cb.crypto`)+thing.cb.crypto}
           >
             <Typography noWrap>{thing.cb.crypto}</Typography>
             <IconButton
@@ -326,12 +326,12 @@ export const Chest = () => {
           </Grid>
 
           <Grid 
-            xs={8}
+            xs={9}
             item
             display={(thing.cb.label) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
-            title={thing.cb.label}
+            title={t(`chest.cb.label`)+thing.cb.label}
           >
             <Typography noWrap>{thing.cb.label}</Typography>
             <IconButton
@@ -350,22 +350,22 @@ export const Chest = () => {
           </Grid>
 
           <Grid 
-            xs={4}
+            xs={3}
             item
-            display={(thing.cb.expiration_date) ? "flex" : "none"}
+            display={(thing.cb.code) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
-            title={thing.cb.expiration_date}
+            title={t(`chest.cb.code`)+thing.cb.code}
           >
-            <Typography noWrap>{thing.cb.expiration_date}</Typography>
+            <Typography noWrap>{thing.cb.code}</Typography>
             <IconButton
               aria-label="copier"
               size="small"
               onClick={(e) => {
                 e.preventDefault();
                 copy({
-                  value: thing.cb.expiration_date,
-                  type: 'cb.expiration_date'
+                  value: thing.cb.code,
+                  type: 'cb.code'
                 })
               }}
             >
@@ -386,7 +386,7 @@ export const Chest = () => {
             display={(thing.code.code) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
-            title={thing.code.code}
+            title={t(`chest.code.code`)+thing.code.code}
           >
             <Typography noWrap>{thing.code.code}</Typography>
             <IconButton
@@ -416,7 +416,7 @@ export const Chest = () => {
             display={(thing.note.note) ? "flex" : "none"}
             justifyContent="center"
             alignItems="center"
-            title={thing.note.note}
+            title={t(`chest.note.note`)+thing.note.note}
           >
             <Typography 
               sx={{
@@ -453,7 +453,8 @@ export const Chest = () => {
       <Grid
         container
         sx={{
-          backgroundColor: '#1A2027'
+          backgroundColor: '#1A2027',
+          marginBottom:'1px'
         }}
       >
         <Grid 
@@ -473,10 +474,9 @@ export const Chest = () => {
           <Typography noWrap>{thing.label}</Typography>
         </Grid>
         <Grid 
-          xs={2}
           md={1}
           item
-          display="flex"
+          display={{ xs: "none", md: "flex" }}
           justifyContent="center"
           alignItems="center"
           title={thing.author.code}
@@ -484,8 +484,8 @@ export const Chest = () => {
           <Typography noWrap>{thing.author.code}</Typography>
         </Grid>
         <Grid 
-          xs={5}
-          md={7}
+          xs={6}
+          md={6}
           item
           display="flex"
           justifyContent="center"
@@ -495,8 +495,8 @@ export const Chest = () => {
           <Typography noWrap>{thing.description}</Typography>
         </Grid>
         <Grid 
-          xs={1}
-          md={1}
+          xs={2}
+          md={2}
           item
           display="flex"
           justifyContent="center"
@@ -736,7 +736,8 @@ export const Chest = () => {
             color: "#000000",
             fontWeight: "bold",
             backgroundColor: "#BB86FC",
-            borderRadius: "5px 5px 0px 0px"
+            borderRadius: "5px 5px 0px 0px",
+            fontSize: "0.875rem"
           }}
         >
           <Grid 
@@ -747,31 +748,30 @@ export const Chest = () => {
             justifyContent="center"
             alignItems="center"
           >
-            Label
+            <Trans>bank.label</Trans>
           </Grid>
           <Grid 
-            xs={2}
             md={1}
             item
-            display="flex"
+            display={{ xs: "none", md: "flex" }}
             justifyContent="center"
             alignItems="center"
           >
-            Auteur
+            <Trans>bank.author</Trans>
           </Grid>
           <Grid 
-            xs={5}
-            md={7}
+            xs={6}
+            md={6}
             item
             display="flex"
             justifyContent="center"
             alignItems="center"
           >
-            Description
+            <Trans>bank.description</Trans>
           </Grid>
           <Grid
-            xs={1}
-            md={1}
+            xs={2}
+            md={2}
             item>
           </Grid>
         </Grid>

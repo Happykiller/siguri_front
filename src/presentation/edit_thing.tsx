@@ -11,11 +11,11 @@ import inversify from '@src/common/inversify';
 import { Footer } from '@presentation/footer';
 import { THING_TYPES } from '@src/common/thingTypes';
 import { FlashStore, flashStore} from '@presentation/flash';
-import { ThingUsecaseModel } from '@usecase/model/thing.usecase.model';
+import ThingUsecaseModel from '@usecase/model/thing.usecase.model';
 import { ContextStoreModel, contextStore } from '@presentation/contextStore';
-import { GetThingUsecaseModel } from '@usecase/getThing/getThing.usecase.model';
-import { UpdateThingUsecaseModel } from '@usecase/updateThing/updateThing.usecase.model';
-import { DeleteThingUsecaseModel } from '@usecase/deleteThing/deleteThing.usecase.model';
+import GetThingUsecaseModel from '@usecase/getThing/getThing.usecase.model';
+import UpdateThingUsecaseModel from '@usecase/updateThing/updateThing.usecase.model';
+import DeleteThingUsecaseModel from '@usecase/deleteThing/deleteThing.usecase.model';
 
 export const EditThing = () => {
   const { t } = useTranslation();

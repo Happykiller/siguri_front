@@ -235,35 +235,38 @@ export const Bank = () => {
       }}
     >
       <Grid 
-        xs={3}
+        xs={4}
+        md={4}
         item
         display="flex"
         justifyContent="center"
         alignItems="center"
       >
-        Label
+        <Trans>bank.label</Trans>
       </Grid>
       <Grid 
-        xs={1}
+        md={1}
         item
-        display="flex"
+        display={{ xs: "none", md: "flex" }}
         justifyContent="center"
         alignItems="center"
       >
-        Auteur
+        <Trans>bank.author</Trans>
       </Grid>
       <Grid
         item
         xs={6}
+        md={5}
         display="flex"
         justifyContent="center"
         alignItems="center"
       >
-        Description
+        <Trans>bank.description</Trans>
       </Grid>
       <Grid
         item
         xs={2}
+        md={2}
       >
       </Grid>
     </Grid>
@@ -274,11 +277,13 @@ export const Bank = () => {
         key={chest.id}
         container
         sx={{
-          backgroundColor: '#1A2027'
+          backgroundColor: '#1A2027',
+          marginBottom:'1px',
         }}
       >
         <Grid 
-          xs={3}
+          xs={4}
+          md={4}
           item
           display="flex"
           justifyContent="center"
@@ -288,9 +293,9 @@ export const Bank = () => {
           <Typography noWrap>{chest.label}</Typography>
         </Grid>
         <Grid 
-          xs={1}
+          md={1}
           item
-          display="flex"
+          display={{ xs: "none", md: "flex" }}
           justifyContent="center"
           alignItems="center"
           title={chest.author.code}
@@ -300,6 +305,7 @@ export const Bank = () => {
         <Grid 
           item
           xs={6}
+          md={5}
           display="flex"
           justifyContent="center"
           alignItems="center"
@@ -309,6 +315,7 @@ export const Bank = () => {
         </Grid>
         <Grid
           xs={2}
+          md={2}
           sx={{
             paddingRight: '15px'
           }}

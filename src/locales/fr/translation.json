@@ -1,6 +1,9 @@
 {
   "bank": {
     "title": "La bank",
+    "label": "Label",
+    "author": "Auteur",
+    "description": "Description",
     "createChest": "Créer un coffre",
     "copy": "Code du coffre copié : ",
     "join": "Code coffre",
@@ -18,14 +21,33 @@
     "bank": "La Bank",
     "password": "Mot de passe",
     "logout": "Quitter",
-    "settings": "Réglages"
+    "settings": "Réglages",
+    "profile": "Profil"
   },
   "chest": {
+    "cb": {
+      "number": "Numéro: ",
+      "code": "Code: ",
+      "crypto": "Cryptograme: ",
+      "expiration_date": "Date d'expiration: ",
+      "label": "Nom: "
+    },
+    "code": {
+      "code": "Code: "
+    },
+    "credential": {
+      "id": "Identifiant: ",
+      "password": "Mot de passe: ",
+      "address": "Adresse: "
+    },
     "secret": "Insérer la clé",
     "submit": "Entrer",
     "keyoff": "Retirer la clé",
     "GET_CHEST_USECASE_WRONG_SECRET": "Mauvaise clé",
     "newThing": "Nouveau",
+    "note": {
+      "note": "Node: "
+    },
     "export": "Exporter",
     "leave": "Abandonner",
     "leaved": "Coffre abandonné",
@@ -74,11 +96,6 @@
     "password": "Entrer votre mot de passe",
     "AUTH_FAIL_WRONG_CREDENTIAL": "Identifiants incorrects"
   },
-  "home": {
-    "title": "Service Siguri",
-    "bank": "La bank",
-    "password": "Mot de passe"
-  },
   "password": {
     "title": "Mot de passe",
     "length": "Longeur",
@@ -87,6 +104,15 @@
     "generated": "Mot de passe : ",
     "sucess": "Généré avec succès et copié",
     "specials": "Caractères spéciaux"
+  },
+  "profile": {
+    "title": "Profil",
+    "code": "Identifiant: ",
+    "name_first": "Prénom: ",
+    "name_last": "Nom: ",
+    "password": "Changer mot de passe",
+    "oldpassword": "Mot de passe actuel",
+    "": ""
   },
   "thing": {
     "submit": "Créer",

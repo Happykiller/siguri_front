@@ -1,7 +1,7 @@
 import { CODES } from '@src/common/codes';
 import { Inversify } from '@src/common/inversify';
-import { GetThingUsecaseDto } from '@usecase/getThing/getThing.usecase.dto';
-import { GetThingUsecaseModel } from '@usecase/getThing/getThing.usecase.model';
+import GetThingUsecaseDto from '@usecase/getThing/getThing.usecase.dto';
+import GetThingUsecaseModel from '@usecase/getThing/getThing.usecase.model';
 
 export class GetThingUsecase {
 

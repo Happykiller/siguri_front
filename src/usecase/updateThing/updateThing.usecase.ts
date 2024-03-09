@@ -1,7 +1,7 @@
 import { CODES } from '@src/common/codes';
 import { Inversify } from '@src/common/inversify';
-import { UpdateThingUsecaseDto } from '@usecase/updateThing/updateThing.usecase.dto';
-import { UpdateThingUsecaseModel } from '@usecase/updateThing/updateThing.usecase.model';
+import UpdateThingUsecaseDto from '@usecase/updateThing/updateThing.usecase.dto';
+import UpdateThingUsecaseModel from '@usecase/updateThing/updateThing.usecase.model';
 
 export class UpdateThingUsecase {
 

@@ -18,7 +18,7 @@ import '@presentation/bar.scss';
 import { ContextStoreModel, contextStore } from '@presentation/contextStore';
 
 const pages = ['bank', 'password'];
-const settings = ['logout'];
+const settings = ['profile', 'logout'];
 
 function Bar() {
   const { t } = useTranslation();
@@ -54,6 +54,10 @@ function Bar() {
     switch(event.currentTarget.innerText.toLowerCase()) { 
       case t('bar.logout').toLowerCase(): {
         reset();
+        break; 
+      }
+      case t('bar.profile').toLowerCase(): {
+        navigate("/profile");
         break; 
       }
     } 
