@@ -111,8 +111,9 @@
     "name_first": "Prénom: ",
     "name_last": "Nom: ",
     "password": "Changer mot de passe",
-    "oldpassword": "Mot de passe actuel",
-    "": ""
+    "oldPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confPassword": "Confirmer mot de passe"
   },
   "thing": {
     "submit": "Créer",
