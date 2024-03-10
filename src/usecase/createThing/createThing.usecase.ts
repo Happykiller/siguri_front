@@ -24,7 +24,8 @@ export class CreateThingUsecase {
             $code: CreateThingCodeResolverDto, 
             $note: CreateThingNoteResolverDto, 
             $cb: CreateThingCbResolverDto, 
-            $credential: CreateThingCredentialResolverDto
+            $credential: CreateThingCredentialResolverDto, 
+            $totp: CreateThingTotpResolverDto
           ) {
             create_thing (
               dto: {
@@ -37,6 +38,7 @@ export class CreateThingUsecase {
                 note: $note
                 cb: $cb
                 credential: $credential
+                totp: $totp
               }
             ) {
               id
@@ -68,6 +70,9 @@ export class CreateThingUsecase {
               }
               note {
                 note
+              }
+              totp {
+                secret
               }
             }
           }`

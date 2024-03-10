@@ -53,6 +53,9 @@ export class GetThingUsecase {
               note {
                 note
               }
+              totp {
+                secret
+              }
             }
           }`
         }

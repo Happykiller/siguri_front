@@ -246,6 +246,33 @@ export const EditThing = () => {
           />
         </Grid>
 
+        {/* Field totp */}
+        <Grid 
+          xs={12}
+          item
+          display={thing.type !== THING_TYPES.TOTP ? "none" : "flex"}
+          justifyContent="center"
+          alignItems="center"
+        >
+          <TextField
+            sx={{ marginRight:1 }}
+            label={<Trans>thing.totp</Trans>}
+            variant="standard"
+            size="small"
+            type='text'
+            value={thing.totp?.secret}
+            onChange={(e) => { 
+              e.preventDefault();
+              setThing({
+                ... thing,
+                totp: {
+                  secret: e.target.value
+                }
+              });
+            }}
+          />
+        </Grid>
+
         {/* Field note */}
         <Grid 
           xs={12}

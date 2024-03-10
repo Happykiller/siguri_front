@@ -1,3 +1,4 @@
+import { totp } from 'otplib';
 import * as React from 'react';
 import { Key } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
@@ -12,6 +13,7 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import HourglassTopIcon from '@mui/icons-material/HourglassTop';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -37,6 +39,7 @@ export const Chest = () => {
   const flash:FlashStore = flashStore();
   const [searchParams] = useSearchParams();
   const context:ContextStoreModel = contextStore();
+  const [time, setTime] = React.useState(new Date());
   const [openRowChild, setOpenRowChild] = React.useState(null);
   const [secretVisible, setSecretVisible] = React.useState(false);
   const [things, setThings] = React.useState<ThingUsecaseModel[]>(null);
@@ -47,6 +50,15 @@ export const Chest = () => {
     data: null,
     error: null
   });
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date();
+      setTime(now);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
   
   const exportData = () => {
     const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
@@ -151,6 +163,31 @@ export const Chest = () => {
   const copy = (dto: { value: string, type: string}) => {
     navigator.clipboard.writeText(dto.value);
     flash.open(t(`chest.copy.${dto.type}`));
+  }
+
+  const TokenTotp = (props: { secret: string }) => {
+    const { secret } = props;
+    const token = totp.generate(secret);
+    const left = (time.getSeconds() > 30)?60-time.getSeconds():30-time.getSeconds();
+    return (
+      <>
+        <Typography noWrap>{token}</Typography>
+        <IconButton
+          aria-label="copier"
+          size="small"
+          onClick={(e) => {
+            e.preventDefault();
+            copy({
+              value: token,
+              type: 'totp.token'
+            })
+          }}
+        >
+          <ContentCopyIcon />
+        </IconButton>
+        {left}s
+      </>
+    )
   }
 
   const RowChild = (props: { thing: ThingUsecaseModel }) => {
@@ -405,6 +442,48 @@ export const Chest = () => {
           </Grid>
         </Grid>
       )
+    } else if (thing.type === THING_TYPES.TOTP) {
+      return (
+        <Grid 
+          container
+        >
+          <Grid 
+            xs={6}
+            item
+            display={(thing.totp.secret) ? "flex" : "none"}
+            justifyContent="center"
+            alignItems="center"
+            title={t(`chest.totp.secret`)+thing.totp.secret}
+          >
+            <Typography noWrap>{thing.totp.secret}</Typography>
+            <IconButton
+              aria-label="copier"
+              size="small"
+              onClick={(e) => {
+                e.preventDefault();
+                copy({
+                  value: thing.totp.secret,
+                  type: 'totp.secret'
+                })
+              }}
+            >
+              <ContentCopyIcon />
+            </IconButton>
+          </Grid>
+          <Grid 
+            xs={6}
+            item
+            display={(thing.totp.secret) ? "flex" : "none"}
+            justifyContent="center"
+            alignItems="center"
+            title={t(`chest.totp.token`)}
+          >
+            <TokenTotp
+              secret={thing.totp.secret}
+            />
+          </Grid>
+        </Grid>
+      )
     } else if (thing.type === 'NOTE') {
       return (
         <Grid 
@@ -470,6 +549,7 @@ export const Chest = () => {
           {(thing.type === THING_TYPES.CODE)?<KeyboardIcon />:''}
           {(thing.type === THING_TYPES.NOTE)?<NotesIcon />:''}
           {(thing.type === THING_TYPES.CREDENTIAL)?<PasswordIcon />:''}
+          {(thing.type === THING_TYPES.TOTP)?<HourglassTopIcon />:''}
           &nbsp;
           <Typography noWrap>{thing.label}</Typography>
         </Grid>
@@ -566,6 +646,7 @@ export const Chest = () => {
         label={<Trans>chest.secret</Trans>}
         variant="standard"
         size="small"
+        autoComplete='false'
         type={(secretVisible)?'text':'password'}
         onChange={(e) => { 
           e.preventDefault();

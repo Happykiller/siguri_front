@@ -32,7 +32,8 @@ export class UpdateThingUsecase {
             $code: CreateThingCodeResolverDto, 
             $note: CreateThingNoteResolverDto, 
             $cb: CreateThingCbResolverDto, 
-            $credential: CreateThingCredentialResolverDto
+            $credential: CreateThingCredentialResolverDto, 
+            $totp: CreateThingTotpResolverDto
           ) {
             update_thing (
               dto: {
@@ -44,6 +45,7 @@ export class UpdateThingUsecase {
                 note: $note
                 cb: $cb
                 credential: $credential
+                totp: $totp
               }
             ) 
             {
@@ -76,6 +78,9 @@ export class UpdateThingUsecase {
               }
               note {
                 note
+              }
+              totp {
+                secret
               }
             }
           }`

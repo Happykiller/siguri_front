@@ -35,23 +35,6 @@
     "code": {
       "code": "Code: "
     },
-    "credential": {
-      "id": "Identifiant: ",
-      "password": "Mot de passe: ",
-      "address": "Adresse: "
-    },
-    "secret": "Insérer la clé",
-    "submit": "Entrer",
-    "keyoff": "Retirer la clé",
-    "GET_CHEST_USECASE_WRONG_SECRET": "Mauvaise clé",
-    "newThing": "Nouveau",
-    "note": {
-      "note": "Node: "
-    },
-    "export": "Exporter",
-    "leave": "Abandonner",
-    "leaved": "Coffre abandonné",
-    "leaveTitle": "Ne plus voir le coffre",
     "copy": {
       "credential": {
         "id": "Identifiant copié",
@@ -70,7 +53,32 @@
       }, 
       "note": {
         "note": "Note copié"
+      },
+      "totp": {
+        "secret": "Clé secrète copiée",
+        "token": "Token copié"
       }
+    },
+    "credential": {
+      "id": "Identifiant: ",
+      "password": "Mot de passe: ",
+      "address": "Adresse: "
+    },
+    "keyoff": "Retirer la clé",
+    "GET_CHEST_USECASE_WRONG_SECRET": "Mauvaise clé",
+    "newThing": "Nouveau",
+    "note": {
+      "note": "Node: "
+    },
+    "export": "Exporter",
+    "leave": "Abandonner",
+    "leaved": "Coffre abandonné",
+    "leaveTitle": "Ne plus voir le coffre",
+    "secret": "Insérer la clé",
+    "submit": "Entrer",
+    "totp": {
+      "secret": "Clé secrète: ",
+      "token": "Token: "
     }
   },
   "common": {
@@ -113,7 +121,9 @@
     "password": "Changer mot de passe",
     "oldPassword": "Mot de passe actuel",
     "newPassword": "Nouveau mot de passe",
-    "confPassword": "Confirmer mot de passe"
+    "confPassword": "Confirmer mot de passe",
+    "UPDATE_PASSWORD_FAIL": "Echec du changement de mot de passe",
+    "passwordUpdated": "Mise à jour du mot de passe réussi"
   },
   "thing": {
     "submit": "Créer",
@@ -131,13 +141,15 @@
     "cbName": "Entrer le nom",
     "expirationDate": "Date d'expiration",
     "CREATE_THING_FAIL": "Erreur lors de la création",
-    "created": "Création réussi"
+    "created": "Création réussi",
+    "totp": "TOTP"
   },
   "thingType": {
     "CB": "CB",
     "CODE": "Code",
     "NOTE": "Note",
-    "CREDENTIAL": "Identifiants"
+    "CREDENTIAL": "Identifiants",
+    "TOTP": "TOTP"
   },
   "editThing": {
     "update": "Mettre à jour",

@@ -22,6 +22,7 @@ export const Thing = () => {
   const thing_id = searchParams.get('thing_id');
   const context:ContextStoreModel = contextStore();
   const chest_label = searchParams.get('chest_label');
+  const [thingTotp, setThingTotp] = React.useState('');
   const [thingType, setThingType] = React.useState('');
   const [thingCode, setThingCode] = React.useState('');
   const [thingNote, setThingNote] = React.useState('');
@@ -78,6 +79,10 @@ export const Thing = () => {
         id: thingLogin,
         password: thingPassword,
         address: thingAddress,
+      }
+    } else if(thingType === THING_TYPES.TOTP) {
+      dto.totp = {
+        secret: thingTotp
       }
     }
 
@@ -200,6 +205,7 @@ export const Thing = () => {
               <MenuItem value={THING_TYPES.CODE}><Trans>thingType.{THING_TYPES.CODE}</Trans></MenuItem>
               <MenuItem value={THING_TYPES.NOTE}><Trans>thingType.{THING_TYPES.NOTE}</Trans></MenuItem>
               <MenuItem value={THING_TYPES.CREDENTIAL}><Trans>thingType.{THING_TYPES.CREDENTIAL}</Trans></MenuItem>
+              <MenuItem value={THING_TYPES.TOTP}><Trans>thingType.{THING_TYPES.TOTP}</Trans></MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -249,6 +255,27 @@ export const Thing = () => {
             onChange={(e) => { 
               e.preventDefault();
               setThingNote(e.target.value);
+            }}
+          />
+        </Grid>
+
+        {/* Field totp */}
+        <Grid 
+          xs={12}
+          item
+          justifyContent="center"
+          alignItems="center"
+          display={thingType !== THING_TYPES.TOTP ? "none" : "flex"}
+        >
+          <TextField
+            label={<Trans>thing.totp</Trans>}
+            variant="standard"
+            size="small"
+            type='text'
+            value={thingTotp}
+            onChange={(e) => { 
+              e.preventDefault();
+              setThingTotp(e.target.value);
             }}
           />
         </Grid>
