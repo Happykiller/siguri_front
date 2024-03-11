@@ -1,5 +1,5 @@
-import { totp } from 'otplib';
 import * as React from 'react';
+import { authenticator  } from 'otplib';
 import { Key } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
@@ -167,7 +167,7 @@ export const Chest = () => {
 
   const TokenTotp = (props: { secret: string }) => {
     const { secret } = props;
-    const token = totp.generate(secret);
+    const token = authenticator.generate(secret);
     const left = (time.getSeconds() > 30)?60-time.getSeconds():30-time.getSeconds();
     return (
       <>
