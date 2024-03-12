@@ -660,6 +660,9 @@ export const Chest = () => {
                 e.preventDefault();
                 setSecretVisible(!secretVisible);
               }}
+              sx={{
+                cursor: 'pointer'
+              }}
             >
               {(secretVisible?<VisibilityOffIcon/>:<VisibilityIcon />)}
             </InputAdornment>

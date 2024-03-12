@@ -119,6 +119,9 @@ export const Profile = () => {
                       oldVisible: !uptPassword.oldVisible
                     });
                   }}
+                  sx={{
+                    cursor: 'pointer'
+                  }}
                 >
                   {(uptPassword.oldVisible?<VisibilityOffIcon/>:<VisibilityIcon />)}
                 </InputAdornment>
@@ -159,6 +162,9 @@ export const Profile = () => {
                       newVisible: !uptPassword.newVisible
                     });
                   }}
+                  sx={{
+                    cursor: 'pointer'
+                  }}
                 >
                   {(uptPassword.newVisible?<VisibilityOffIcon/>:<VisibilityIcon />)}
                 </InputAdornment>
@@ -198,6 +204,9 @@ export const Profile = () => {
                       ... uptPassword,
                       confVisible: !uptPassword.confVisible
                     });
+                  }}
+                  sx={{
+                    cursor: 'pointer'
                   }}
                 >
                   {(uptPassword.confVisible?<VisibilityOffIcon/>:<VisibilityIcon />)}
