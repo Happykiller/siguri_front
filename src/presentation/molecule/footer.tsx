@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Trans } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
-import '@presentation/footer.scss';
+import '@presentation/molecule/footer.scss';
 import { CODES } from '@src/common/codes';
-import { version } from '../../package.json';
+import { version } from '../../../package.json';
 import inversify from '@src/common/inversify';
 import { SystemInfoUsecaseModel } from '@usecase/system/model/systemInfo.usecase.model';
-import { Link } from 'react-router-dom';
 
 export const Footer = () => {
   const [backVersion, setBackVersion] = React.useState('loading');

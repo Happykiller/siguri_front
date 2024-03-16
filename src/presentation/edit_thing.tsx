@@ -5,12 +5,12 @@ import { Button, Grid, TextField } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 
-import Bar from '@presentation/bar';
+import Bar from '@src/presentation/molecule/bar';
 import { CODES } from '@src/common/codes';
 import inversify from '@src/common/inversify';
-import { Footer } from '@presentation/footer';
+import { Footer } from '@src/presentation/molecule/footer';
 import { THING_TYPES } from '@src/common/thingTypes';
-import { FlashStore, flashStore} from '@presentation/flash';
+import { FlashStore, flashStore} from '@src/presentation/molecule/flash';
 import ThingUsecaseModel from '@usecase/model/thing.usecase.model';
 import { ContextStoreModel, contextStore } from '@presentation/contextStore';
 import GetThingUsecaseModel from '@usecase/getThing/getThing.usecase.model';

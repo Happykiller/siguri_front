@@ -9,11 +9,11 @@ import { createSearchParams, useNavigate } from "react-router-dom";
 import { Button, Divider, Grid, IconButton, InputBase, Paper, TextField, Tooltip, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
-import Bar from '@presentation/bar';
+import Bar from '@src/presentation/molecule/bar';
 import { CODES } from '@src/common/codes';
-import { Footer } from '@presentation/footer';
+import { Footer } from '@src/presentation/molecule/footer';
 import inversify from '@src/common/inversify';
-import { FlashStore, flashStore} from '@presentation/flash';
+import { FlashStore, flashStore} from '@src/presentation/molecule/flash';
 import { ChestUsecaseModel } from '@usecase/model/chest.usecase.model';
 import { ContextStoreModel, contextStore } from '@presentation/contextStore';
 import { GetChestsUsecaseModel } from '@usecase/getChests/getChests.usecase.model';

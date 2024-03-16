@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { Link, useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from 'react-i18next';
 
-import '@presentation/bar.scss';
+import '@presentation/molecule/bar.scss';
 import { ContextStoreModel, contextStore } from '@presentation/contextStore';
 
 const pages = ['bank', 'password'];

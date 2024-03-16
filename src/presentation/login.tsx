@@ -8,8 +8,9 @@ import { Box, Button, InputAdornment, TextField } from '@mui/material';
 
 import '@presentation/login.scss';
 import { CODES } from '@src/common/codes';
-import { Footer } from '@presentation/footer';
 import inversify from '@src/common/inversify';
+import { Input } from '@presentation/molecule/input';
+import { Footer } from '@presentation/molecule/footer';
 import { contextStore } from '@presentation/contextStore';
 import { AuthUsecaseModel } from '@usecase/auth/model/auth.usecase.model';
 
@@ -23,6 +24,29 @@ export const Login = () => {
   const [currentLogin, setCurrentLogin] = React.useState('');
   const [passVisible, setPassVisible] = React.useState(false);
   const [currentPassword, setCurrentPassword] = React.useState('');
+  
+  const [formEntities, setFormEntities] = React.useState({
+    field0: {
+      value: '',
+      valid: true
+    },
+    field1: {
+      value: '',
+      valid: false
+    },
+    field2: {
+      value: '',
+      valid: false
+    },
+    field3: {
+      value: '',
+      valid: false
+    },
+    field4: {
+      value: '',
+      valid: false
+    }
+  });
 
   const handleClick = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -69,6 +93,10 @@ export const Login = () => {
   if(qry.loading) {
     form = <div><Trans>common.loading</Trans></div>;
   } else {
+    console.log('field1', formEntities.field1)
+    console.log('field2', formEntities.field2)
+    console.log('field3', formEntities.field3)
+    console.log('field4', formEntities.field4)
     form = <form
     onSubmit={handleClick}
   >
@@ -80,6 +108,56 @@ export const Login = () => {
         gap: '10px;'
       }}
     >
+      {/* Field 2 */}
+      <Input
+        label={<Trans>login.field2</Trans>}
+        tooltip='Des lettres'
+        entity={formEntities.field0}
+      />
+
+      {/* Field 1 => Require */}
+      <Input
+        label={<Trans>login.field1</Trans>}
+        tooltip='Obligatoire'
+        entity={formEntities.field1}
+        onChange={(entity:any) => { 
+          setFormEntities({
+            ... formEntities,
+            field1: {
+              value: entity.value,
+              valid: entity.valid
+            }
+          });
+        }}
+        require
+      />
+      
+      {/* Field 2 */}
+      <Input
+        label={<Trans>login.field2</Trans>}
+        regex='^([a-zA-Z])+$'
+        tooltip='Des lettres'
+        entity={formEntities.field2}
+      />
+      
+      {/* Field 3 */}
+      <Input
+        label={<Trans>login.field3</Trans>}
+        regex='^([0-9]){1,5}$'
+        tooltip='Des nombres'
+        type='number'
+        entity={formEntities.field3}
+      />
+      
+      {/* Field 4 */}
+      <Input
+        label={<Trans>login.field4</Trans>}
+        regex='^([0-9]){1,5}$'
+        tooltip='Des nombres'
+        type='password'
+        entity={formEntities.field4}
+      />
+
       {/* Field Login */}
       <TextField
         sx={{ marginRight:1}}

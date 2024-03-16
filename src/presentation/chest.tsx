@@ -22,12 +22,12 @@ import { useSearchParams, useNavigate, createSearchParams } from 'react-router-d
 import { Button, Grid, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
-import Bar from '@presentation/bar';
+import Bar from '@src/presentation/molecule/bar';
 import { CODES } from '@src/common/codes';
-import { Footer } from '@presentation/footer';
+import { Footer } from '@src/presentation/molecule/footer';
 import inversify from '@src/common/inversify';
 import { THING_TYPES } from '@src/common/thingTypes';
-import { FlashStore, flashStore} from '@presentation/flash';
+import { FlashStore, flashStore} from '@src/presentation/molecule/flash';
 import ThingUsecaseModel from '@usecase/model/thing.usecase.model';
 import { ContextStoreModel, contextStore } from '@presentation/contextStore';
 import GetThingsUsecaseModel from '@usecase/getThings/getThings.usecase.model';

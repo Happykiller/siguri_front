@@ -4,12 +4,12 @@ import { Trans, useTranslation } from 'react-i18next';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
-import Bar from '@presentation/bar';
+import Bar from '@src/presentation/molecule/bar';
 import { CODES } from '@src/common/codes';
 import inversify from '@src/common/inversify';
-import { Footer } from '@presentation/footer';
+import { Footer } from '@src/presentation/molecule/footer';
 import { THING_TYPES } from '@src/common/thingTypes';
-import { FlashStore, flashStore} from '@presentation/flash';
+import { FlashStore, flashStore} from '@src/presentation/molecule/flash';
 import { ContextStoreModel, contextStore } from '@presentation/contextStore';
 import { CreateThingUsecaseModel } from '@usecase/createThing/createThing.usecase.model';
 

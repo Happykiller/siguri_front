@@ -7,11 +7,11 @@ import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { Chip, Grid, InputAdornment, TextField } from '@mui/material';
 
 import '@presentation/common.scss';
-import Bar from '@presentation/bar';
+import Bar from '@src/presentation/molecule/bar';
 import { CODES } from '@src/common/codes';
-import { Footer } from '@presentation/footer';
+import { Footer } from '@src/presentation/molecule/footer';
 import inversify from '@src/common/inversify';
-import { FlashStore, flashStore} from '@presentation/flash';
+import { FlashStore, flashStore} from '@src/presentation/molecule/flash';
 import { ContextStoreModel, contextStore } from '@presentation/contextStore';
 import { UpdPasswordUsecaseModel } from '@usecase/updPassword/updPassword.usecase.model';
 
