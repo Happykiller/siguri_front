@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { Trans } from 'react-i18next';
 import { Done } from '@mui/icons-material';
+import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { Box, Button, InputAdornment, TextField } from '@mui/material';
 
 import '@presentation/login.scss';
 import { CODES } from '@src/common/codes';
@@ -21,28 +19,13 @@ export const Login = () => {
     data: null,
     error: null
   });
-  const [currentLogin, setCurrentLogin] = React.useState('');
-  const [passVisible, setPassVisible] = React.useState(false);
-  const [currentPassword, setCurrentPassword] = React.useState('');
   
   const [formEntities, setFormEntities] = React.useState({
-    field0: {
-      value: '',
-      valid: true
-    },
-    field1: {
+    login: {
       value: '',
       valid: false
     },
-    field2: {
-      value: '',
-      valid: false
-    },
-    field3: {
-      value: '',
-      valid: false
-    },
-    field4: {
+    password: {
       value: '',
       valid: false
     }
@@ -55,8 +38,8 @@ export const Login = () => {
       loading: true
     }));
     inversify.authUsecase.execute({
-      login: currentLogin,
-      password: currentPassword
+      login: formEntities.login.value,
+      password: formEntities.password.value
     }).then((response:AuthUsecaseModel) => {
       if(response.message === CODES.SUCCESS) {
         contextStore.setState({ 
@@ -93,10 +76,6 @@ export const Login = () => {
   if(qry.loading) {
     form = <div><Trans>common.loading</Trans></div>;
   } else {
-    console.log('field1', formEntities.field1)
-    console.log('field2', formEntities.field2)
-    console.log('field3', formEntities.field3)
-    console.log('field4', formEntities.field4)
     form = <form
     onSubmit={handleClick}
   >
@@ -108,22 +87,16 @@ export const Login = () => {
         gap: '10px;'
       }}
     >
-      {/* Field 2 */}
+      {/* Login */}
       <Input
-        label={<Trans>login.field2</Trans>}
-        tooltip='Des lettres'
-        entity={formEntities.field0}
-      />
-
-      {/* Field 1 => Require */}
-      <Input
-        label={<Trans>login.field1</Trans>}
-        tooltip='Obligatoire'
-        entity={formEntities.field1}
+        label={<Trans>login.login.label</Trans>}
+        tooltip={<Trans>login.login.tooltip</Trans>}
+        regex='^([a-zA-Z])+$'
+        entity={formEntities.login}
         onChange={(entity:any) => { 
           setFormEntities({
             ... formEntities,
-            field1: {
+            login: {
               value: entity.value,
               valid: entity.valid
             }
@@ -131,73 +104,24 @@ export const Login = () => {
         }}
         require
       />
-      
-      {/* Field 2 */}
-      <Input
-        label={<Trans>login.field2</Trans>}
-        regex='^([a-zA-Z])+$'
-        tooltip='Des lettres'
-        entity={formEntities.field2}
-      />
-      
-      {/* Field 3 */}
-      <Input
-        label={<Trans>login.field3</Trans>}
-        regex='^([0-9]){1,5}$'
-        tooltip='Des nombres'
-        type='number'
-        entity={formEntities.field3}
-      />
-      
-      {/* Field 4 */}
-      <Input
-        label={<Trans>login.field4</Trans>}
-        regex='^([0-9]){1,5}$'
-        tooltip='Des nombres'
-        type='password'
-        entity={formEntities.field4}
-      />
 
-      {/* Field Login */}
-      <TextField
-        sx={{ marginRight:1}}
-        label={<Trans>login.login</Trans>}
-        variant="standard"
-        size="small"
-        onChange={(e) => { 
-          e.preventDefault();
-          setCurrentLogin(e.target.value);
+      {/* Password */}
+      <Input
+        label={<Trans>login.password.label</Trans>}
+        tooltip={<Trans>login.password.tooltip</Trans>}
+        regex='^([a-zA-Z0-9@$!%*?&])+$'
+        type='password'
+        entity={formEntities.password}
+        onChange={(entity:any) => { 
+          setFormEntities({
+            ... formEntities,
+            password: {
+              value: entity.value,
+              valid: entity.valid
+            }
+          });
         }}
-      />
-      
-      {/* Field Password */}
-      <TextField
-        sx={{ marginRight:1}}
-        label={<Trans>login.password</Trans>}
-        variant="standard"
-        size="small"
-        autoComplete='false'
-        type={(passVisible)?'text':'password'}
-        onChange={(e) => { 
-          e.preventDefault();
-          setCurrentPassword(e.target.value);
-        }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment 
-              position="end"
-              onClick={(e) => { 
-                e.preventDefault();
-                setPassVisible(!passVisible);
-              }}
-              sx={{
-                cursor: 'pointer'
-              }}
-            >
-              {(passVisible?<VisibilityOffIcon/>:<VisibilityIcon />)}
-            </InputAdornment>
-          ),
-        }}
+        require
       />
 
       {/* Submit button */}
@@ -206,7 +130,7 @@ export const Login = () => {
         variant="contained"
         size="small"
         startIcon={<Done />}
-        disabled={!(currentLogin.length > 3 && currentPassword.length > 3)}
+        disabled={!(formEntities.login.valid && formEntities.password.valid)}
       ><Trans>common.done</Trans></Button>
     </Box>
   </form>

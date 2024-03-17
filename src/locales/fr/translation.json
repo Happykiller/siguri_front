@@ -100,8 +100,14 @@
   },
   "login": {
     "title": "Authentification",
-    "login": "Entrer votre nom",
-    "password": "Entrer votre mot de passe",
+    "login": {
+      "label": "Entrer votre nom",
+      "tooltip": "Juste des lettres"
+    },
+    "password": {
+      "label": "Entrer votre mot de passe",
+      "tooltip": "Des lettres et chiffres avec possible @$!%*?&"
+    },
     "AUTH_FAIL_WRONG_CREDENTIAL": "Identifiants incorrects"
   },
   "password": {
