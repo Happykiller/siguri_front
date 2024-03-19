@@ -3,7 +3,7 @@ import { useLocation, Navigate } from "react-router-dom";
 
 import { CODES } from '@src/common/codes';
 import inversify from '@src/common/inversify';
-import { ContextStoreModel, contextStore } from '@presentation/contextStore';
+import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
 import { SessionInfoUsecaseModel } from '@usecase/sessionInfo/model/sessionInfo.usecase.model';
 import { Trans } from 'react-i18next';
 

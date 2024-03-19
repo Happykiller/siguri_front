@@ -22,16 +22,18 @@ import { useSearchParams, useNavigate, createSearchParams } from 'react-router-d
 import { Button, Grid, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
-import Bar from '@src/presentation/molecule/bar';
 import { CODES } from '@src/common/codes';
-import { Footer } from '@src/presentation/molecule/footer';
+import Bar from '@presentation/molecule/bar';
 import inversify from '@src/common/inversify';
 import { THING_TYPES } from '@src/common/thingTypes';
-import { FlashStore, flashStore} from '@src/presentation/molecule/flash';
+import { Input } from '@presentation/molecule/input';
+import { Footer } from '@presentation/molecule/footer';
 import ThingUsecaseModel from '@usecase/model/thing.usecase.model';
-import { ContextStoreModel, contextStore } from '@presentation/contextStore';
+import { FlashStore, flashStore} from '@presentation/molecule/flash';
 import GetThingsUsecaseModel from '@usecase/getThings/getThings.usecase.model';
 import LeaveChestUsecaseModel from '@usecase/leaveChest/leaveChest.usecase.model';
+import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
+import { REGEX } from '../common/REGEX';
 
 export const Chest = () => {
   const { t } = useTranslation();
@@ -44,7 +46,10 @@ export const Chest = () => {
   const [secretVisible, setSecretVisible] = React.useState(false);
   const [things, setThings] = React.useState<ThingUsecaseModel[]>(null);
   const se = context.chests_secret?.find((elt) => elt.id === searchParams.get('chest_id'))?.secret ?? '';
-  const [secretForm, setSecretForm] = React.useState(se);
+  const [secretForm, setSecretForm] = React.useState({
+    value: se,
+    valid: false
+  });
   const [qry, setQry] = React.useState({
     loading: false,
     data: null,
@@ -76,12 +81,12 @@ export const Chest = () => {
     if(!context.chests_secret) {
       context.chests_secret = [{
         id: searchParams.get('chest_id'),
-        secret: secretForm
+        secret: secretForm.value
       }];
     } else {
       context.chests_secret.push({
         id: searchParams.get('chest_id'),
-        secret: secretForm
+        secret: secretForm.value
       });
     }
     contextStore.setState({ 
@@ -141,7 +146,7 @@ export const Chest = () => {
 
   const newThing = async (event: React.SyntheticEvent) => {
     navigate({
-      pathname: '/thing',
+      pathname: '/create_thing',
       search: createSearchParams({
         chest_id: searchParams.get('chest_id'),
         chest_label: searchParams.get('chest_label')
@@ -641,33 +646,20 @@ export const Chest = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <TextField
-        sx={{ marginRight:1}}
+      <Input
         label={<Trans>chest.secret</Trans>}
-        variant="standard"
-        size="small"
-        autoComplete='false'
-        type={(secretVisible)?'text':'password'}
-        onChange={(e) => { 
-          e.preventDefault();
-          setSecretForm(e.target.value);
+        tooltip={<Trans>REGEX.CHEST_KEY</Trans>}
+        regex={REGEX.CHEST_KEY}
+        type="password"
+        entity={secretForm}
+        onChange={(entity:any) => { 
+          setSecretForm({
+            value: entity.value,
+            valid: entity.valid
+          });
         }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment 
-              position="end"
-              onClick={(e) => { 
-                e.preventDefault();
-                setSecretVisible(!secretVisible);
-              }}
-              sx={{
-                cursor: 'pointer'
-              }}
-            >
-              {(secretVisible?<VisibilityOffIcon/>:<VisibilityIcon />)}
-            </InputAdornment>
-          ),
-        }}
+        require
+        virgin
       />
     </Grid>
 
@@ -677,13 +669,11 @@ export const Chest = () => {
       item
       textAlign='center'
     >
-      <Button 
-        sx={{
-          m: 1,
-        }}
+      <Button
         type="submit"
         variant="contained"
         size="small"
+        disabled={!secretForm.valid}
         startIcon={<Key />}
       ><Trans>chest.submit</Trans></Button>
     </Grid>

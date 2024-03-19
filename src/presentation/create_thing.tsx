@@ -4,22 +4,21 @@ import { Trans, useTranslation } from 'react-i18next';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
-import Bar from '@src/presentation/molecule/bar';
 import { CODES } from '@src/common/codes';
+import Bar from '@presentation/molecule/bar';
 import inversify from '@src/common/inversify';
-import { Footer } from '@src/presentation/molecule/footer';
 import { THING_TYPES } from '@src/common/thingTypes';
-import { FlashStore, flashStore} from '@src/presentation/molecule/flash';
-import { ContextStoreModel, contextStore } from '@presentation/contextStore';
+import { Footer } from '@presentation/molecule/footer';
+import { FlashStore, flashStore} from '@presentation/molecule/flash';
+import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
 import { CreateThingUsecaseModel } from '@usecase/createThing/createThing.usecase.model';
 
-export const Thing = () => {
+export const CreateThing = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const flash:FlashStore = flashStore();
   const [searchParams] = useSearchParams();
   const chest_id = searchParams.get('chest_id');
-  const thing_id = searchParams.get('thing_id');
   const context:ContextStoreModel = contextStore();
   const chest_label = searchParams.get('chest_label');
   const [thingTotp, setThingTotp] = React.useState('');

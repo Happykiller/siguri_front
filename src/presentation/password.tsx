@@ -3,12 +3,12 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Button, Checkbox, FormControlLabel, Grid, TextField } from '@mui/material';
 
 import '@presentation/common.scss';
-import Bar from '@src/presentation/molecule/bar';
 import { CODES } from '@src/common/codes';
 import { Send } from '@mui/icons-material';
+import Bar from '@presentation/molecule/bar';
 import inversify from '@src/common/inversify';
-import { Footer } from '@src/presentation/molecule/footer';
-import { FlashStore, flashStore} from '@src/presentation/molecule/flash';
+import { Footer } from '@presentation/molecule/footer';
+import { FlashStore, flashStore} from '@presentation/molecule/flash';
 import { GeneratePasswordUsecaseModel } from '@usecase/generatePassword/model/generatePassword.usecase.model';
 
 export const Password = () => {

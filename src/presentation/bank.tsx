@@ -6,74 +6,36 @@ import GroupIcon from '@mui/icons-material/Group';
 import { Trans, useTranslation } from 'react-i18next';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import { createSearchParams, useNavigate } from "react-router-dom";
-import { Button, Divider, Grid, IconButton, InputBase, Paper, TextField, Tooltip, Typography } from '@mui/material';
+import { Button, Divider, Grid, IconButton, Paper, Tooltip, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
-import Bar from '@src/presentation/molecule/bar';
+import { REGEX } from '@src/common/REGEX';
 import { CODES } from '@src/common/codes';
-import { Footer } from '@src/presentation/molecule/footer';
+import Bar from '@presentation/molecule/bar';
 import inversify from '@src/common/inversify';
-import { FlashStore, flashStore} from '@src/presentation/molecule/flash';
+import { Input } from '@presentation/molecule/input';
+import { Footer } from '@presentation/molecule/footer';
+import { FlashStore, flashStore} from '@presentation/molecule/flash';
 import { ChestUsecaseModel } from '@usecase/model/chest.usecase.model';
-import { ContextStoreModel, contextStore } from '@presentation/contextStore';
+import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
 import { GetChestsUsecaseModel } from '@usecase/getChests/getChests.usecase.model';
 import { JoinChestUsecaseModel } from '@usecase/joinChest/joinChest.usecase.model';
-import { CreateChestUsecaseModel } from '@usecase/createChest/createChest.usecase.model';
 
 export const Bank = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const flash:FlashStore = flashStore();
-  const [code, setCode] = React.useState('');
+  const [code, setCode] = React.useState({
+    value: '',
+    valid: false
+  });
   const context:ContextStoreModel = contextStore();
-  const [chestKey, setChestKey] = React.useState('');
-  const [chestDesc, setChestDesc] = React.useState('');
-  const [currentMsg, setCurrentMsg] = React.useState('');
-  const [chestLabel, setChestLabel] = React.useState('');
-  const [currentAction, setCurrentAction] = React.useState('default');
   const [chests, setChest] = React.useState<ChestUsecaseModel[]>(null);
   const [qry, setQry] = React.useState({
-    loading: true,
+    loading: false,
     data: null,
     error: null
   });
-
-  if(chests === null) {
-    setChest([]);
-    setQry(qry => ({
-      ...qry,
-      loading: true
-    }));
-    inversify.getChestsUsecase.execute()
-      .then((response:GetChestsUsecaseModel) => {
-        if(response.message === CODES.SUCCESS) {
-          setChest(response.data);
-        } else {
-          inversify.loggerService.debug(response.error);
-          setQry(qry => ({
-            ...qry,
-            error: response.message
-          }));
-        }
-      })
-      .catch((error:any) => {
-        setQry(qry => ({
-          ...qry,
-          error: error.message
-        }));
-      })
-      .finally(() => {
-        setQry(qry => ({
-          ...qry,
-          loading: false
-        }));
-      });
-  }
-
-  const handleOpenFormChest = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    setCurrentAction('createChest');
-  }
 
   const join = () => {
     setQry(qry => ({
@@ -81,24 +43,28 @@ export const Bank = () => {
       loading: true
     }));
     inversify.joinChestUsecase.execute({
-      chest_id: code
+      chest_id: code.value
     }).then((response:JoinChestUsecaseModel) => {
       if(response.message === CODES.SUCCESS) {
         flash.open(t('bank.joined'));
         setChest(null);
-        setCode('');
+        setCode({
+          value: '',
+          valid: false
+        });
       } else {
-        inversify.loggerService.debug(response.error);
+        flash.open(t(`bank.${response.message}`));
         setQry(qry => ({
           ...qry,
-          error: response.message
+          error: true
         }));
       }
     })
     .catch((error:any) => {
+      flash.open(t(`bank.${error.message}`));
       setQry(qry => ({
         ...qry,
-        error: error.message
+        error: true
       }));
     })
     .finally(() => {
@@ -130,43 +96,6 @@ export const Bank = () => {
     flash.open(t(`bank.copy`)+dto.label);
   }
 
-  const handleCreateChest = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    setQry(qry => ({
-      ...qry,
-      loading: true
-    }));
-    inversify.createChestUsecase.execute({
-      label: chestLabel,
-      secret: chestKey,
-      description: chestDesc
-    }).then((response:CreateChestUsecaseModel) => {
-      if(response.message === CODES.SUCCESS) {
-        flash.open(t('bank.formChest.created'));
-        setCurrentAction('default');
-        setChest(null);
-      } else {
-        inversify.loggerService.debug(response.error);
-        setQry(qry => ({
-          ...qry,
-          error: response.message
-        }));
-      }
-    })
-    .catch((error:any) => {
-      setQry(qry => ({
-        ...qry,
-        error: error.message
-      }));
-    })
-    .finally(() => {
-      setQry(qry => ({
-        ...qry,
-        loading: false
-      }));
-    });
-  }
-
   const defaultContent = <div><Grid 
     container
     display="flex"
@@ -185,28 +114,37 @@ export const Bank = () => {
       variant="contained"
       size="small"
       startIcon={<AddIcon />}
-      onClick={handleOpenFormChest}
+      onClick={(e) => {
+        e.preventDefault();
+        navigate({
+          pathname: '/create_chest'
+        });
+      }}
     ><Trans>bank.createChest</Trans></Button>
     <Paper
       component="form"
       sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 200 }}
     >
-      <InputBase
-        sx={{ ml: 1, flex: 1 }}
-        placeholder={t('bank.join')}
-        inputProps={{ 'aria-label': t('bank.join') }}
-        value={code}
-        onChange={(e) => { 
-          e.preventDefault();
-          setCode(e.target.value);
+      <Input
+        label={<Trans>bank.join</Trans>}
+        tooltip={<Trans>REGEX.CHEST_CODE</Trans>}
+        regex={REGEX.CHEST_CODE}
+        entity={code}
+        onChange={(entity:any) => { 
+          setCode({
+            value: entity.value,
+            valid: entity.valid
+          });
         }}
+        require
+        virgin
       />
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
       <IconButton 
         color="primary" 
         sx={{ p: '10px' }} 
         title={t('bank.joinTitle')}
-        disabled={(code.length !== 24)}
+        disabled={!code.valid}
         onClick={(e) => {
           e.preventDefault();
           join()
@@ -370,123 +308,45 @@ export const Bank = () => {
       </Grid>
     )})}
 
-  </Grid>
-</div>
-;
-
-  const createChestContent = <form
-    onSubmit={handleCreateChest}
-  ><Grid 
-    container
-    rowSpacing={1}
-    columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-  >
-    {/* Field label */}
-    <Grid 
-      xs={6}
-      item
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <TextField
-        sx={{ marginRight:1 }}
-        label={<Trans>bank.formChest.label</Trans>}
-        variant="standard"
-        size="small"
-        type='text'
-        value={chestLabel}
-        onChange={(e) => { 
-          e.preventDefault();
-          setChestLabel(e.target.value);
-        }}
-      />
-    </Grid>
-
-    {/* Field key */}
-    <Grid 
-      xs={6}
-      item
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <TextField
-        sx={{ marginRight:1 }}
-        label={<Trans>bank.formChest.key</Trans>}
-        variant="standard"
-        size="small"
-        type='text'
-        value={chestKey}
-        onChange={(e) => { 
-          e.preventDefault();
-          setChestKey(e.target.value);
-        }}
-      />
-    </Grid>
-    
-    {/* Field description */}
-    <Grid 
-      xs={12}
-      item
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <TextField
-        sx={{ marginRight:1 }}
-        fullWidth
-        label={<Trans>bank.formChest.description</Trans>}
-        variant="standard"
-        size="small"
-        value={chestDesc}
-        onChange={(e) => { 
-          e.preventDefault();
-          setChestDesc(e.target.value);
-        }}
-      />
-    </Grid>
-
-    {/* Button submit */}
-    <Grid 
-      xs={12}
-      item
-      textAlign='center'
-    >
-      <Button 
-        sx={{
-          m: 1,
-        }}
-        type="submit"
-        variant="contained"
-        size="small"
-        startIcon={<AddIcon />}
-      ><Trans>bank.formChest.create</Trans></Button>
-    </Grid>
-
-    {/* Button submit */}
-    <Grid 
-      xs={12}
-      item
-      textAlign='center'
-    >
-      {currentMsg}
-    </Grid>
-
-  </Grid></form>;
+  </Grid></div>;
 
   let content = <div></div>;
   if(qry.loading) {
     content = <div><Trans>common.loading</Trans></div>;
-  } else if (currentAction === 'default') {
+  } else if(qry.error) {
+    content = <div><Trans>bank.{qry.error}</Trans></div>;
+  } else if(chests === null) {
+    setChest([]);
+    setQry(qry => ({
+      ...qry,
+      loading: true
+    }));
+    inversify.getChestsUsecase.execute()
+      .then((response:GetChestsUsecaseModel) => {
+        if(response.message === CODES.SUCCESS) {
+          setChest(response.data);
+        } else {
+          inversify.loggerService.debug(response.error);
+          setQry(qry => ({
+            ...qry,
+            error: response.message
+          }));
+        }
+      })
+      .catch((error:any) => {
+        setQry(qry => ({
+          ...qry,
+          error: error.message
+        }));
+      })
+      .finally(() => {
+        setQry(qry => ({
+          ...qry,
+          loading: false
+        }));
+      });
+  } else {
     content = defaultContent;
-  } else if (currentAction === 'createChest') { 
-    content = createChestContent;
-  }
-
-  let errorMessage = <div></div>;
-  if(qry.error) {
-    errorMessage = <div><Trans>login.{qry.error}</Trans></div>
   }
   
   return (
@@ -499,9 +359,6 @@ export const Bank = () => {
           </div>
           <div>
             {content}
-          </div>
-          <div>
-            {errorMessage}
           </div>
         </div>
       </div>

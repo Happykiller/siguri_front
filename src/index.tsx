@@ -6,16 +6,17 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import '@src/i18n';
 import '@src/index.scss';
-import Flash from '@src/presentation/molecule/flash';
 import { CGU } from '@presentation/cgu';
 import { Bank } from '@presentation/bank';
-import { Thing } from '@presentation/thing';
 import { Login } from '@presentation/login';
-import { Guard } from '@presentation/guard';
 import { Chest } from '@presentation/chest';
 import { Profile } from '@presentation/profile';
+import Flash from '@presentation/molecule/flash';
 import { Password } from '@presentation/password';
+import { Guard } from '@presentation/molecule/guard';
 import { EditThing } from '@presentation/edit_thing';
+import { CreateThing } from '@presentation/create_thing';
+import { CreateChest } from '@presentation/create_chest';
 
 const router = createBrowserRouter([
   {
@@ -39,12 +40,16 @@ const router = createBrowserRouter([
     element: <Guard><Chest /></Guard>,
   },
   {
-    path: "/thing",
-    element: <Guard><Thing /></Guard>,
+    path: "/create_thing",
+    element: <Guard><CreateThing /></Guard>,
   },
   {
     path: "/edit_thing",
     element: <Guard><EditThing /></Guard>,
+  },
+  {
+    path: "/create_chest",
+    element: <Guard><CreateChest /></Guard>,
   },
   {
     path: "/profile",

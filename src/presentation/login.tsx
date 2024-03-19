@@ -9,8 +9,9 @@ import { CODES } from '@src/common/codes';
 import inversify from '@src/common/inversify';
 import { Input } from '@presentation/molecule/input';
 import { Footer } from '@presentation/molecule/footer';
-import { contextStore } from '@presentation/contextStore';
+import { contextStore } from '@presentation/store/contextStore';
 import { AuthUsecaseModel } from '@usecase/auth/model/auth.usecase.model';
+import { REGEX } from '../common/REGEX';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -89,9 +90,9 @@ export const Login = () => {
     >
       {/* Login */}
       <Input
-        label={<Trans>login.login.label</Trans>}
-        tooltip={<Trans>login.login.tooltip</Trans>}
-        regex='^([a-zA-Z])+$'
+        label={<Trans>login.login</Trans>}
+        tooltip={<Trans>REGEX.LOGIN</Trans>}
+        regex={REGEX.LOGIN}
         entity={formEntities.login}
         onChange={(entity:any) => { 
           setFormEntities({
@@ -103,13 +104,14 @@ export const Login = () => {
           });
         }}
         require
+        virgin
       />
 
       {/* Password */}
       <Input
-        label={<Trans>login.password.label</Trans>}
-        tooltip={<Trans>login.password.tooltip</Trans>}
-        regex='^([a-zA-Z0-9@$!%*?&])+$'
+        label={<Trans>login.password</Trans>}
+        tooltip={<Trans>REGEX.PASSWORD</Trans>}
+        regex={REGEX.PASSWORD}
         type='password'
         entity={formEntities.password}
         onChange={(entity:any) => { 
@@ -122,6 +124,7 @@ export const Login = () => {
           });
         }}
         require
+        virgin
       />
 
       {/* Submit button */}

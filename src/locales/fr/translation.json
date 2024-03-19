@@ -9,13 +9,7 @@
     "join": "Code coffre",
     "joinTitle": "Rejoindre un coffre existant avec son code",
     "joined": "Coffre rejoins",
-    "formChest": {
-      "create": "Créer",
-      "label": "Label",
-      "key": "Clé",
-      "description": "Description",
-      "created": "Coffre créé"
-    }
+    "JOIN_CHEST_FAIL": "Impossible de rejoindre"
   },
   "bar": {
     "bank": "La Bank",
@@ -82,10 +76,20 @@
     }
   },
   "common": {
-    "done": "Valider",
     "cancel": "Annuler",
     "create": "Créer",
+    "done": "Valider",
+    "field_incorrect": "Champ inccorect",
     "loading": "Chargement..."
+  },
+  "create_chest": {
+    "create": "Créer",
+    "title": "Créer un coffre",
+    "label": "Donner un label",
+    "key": "Entrer la clé",
+    "description": "Une description",
+    "created": "Coffre créé",
+    "CREATE_CHEST_FAIL": "Echec de la création"
   },
   "error": {
     "credentials_wrong": "Identification impossible"
@@ -100,14 +104,8 @@
   },
   "login": {
     "title": "Authentification",
-    "login": {
-      "label": "Entrer votre nom",
-      "tooltip": "Juste des lettres"
-    },
-    "password": {
-      "label": "Entrer votre mot de passe",
-      "tooltip": "Des lettres et chiffres avec possible @$!%*?&"
-    },
+    "login": "Entrer votre nom",
+    "password": "Entrer votre mot de passe",
     "AUTH_FAIL_WRONG_CREDENTIAL": "Identifiants incorrects"
   },
   "password": {
@@ -162,5 +160,13 @@
     "delete": "Supprimer",
     "updated": "Mise à jour réussi",
     "deleted": "Suppression réussi"
+  },
+  "REGEX": {
+    "LOGIN": "De 3 à 50, juste des lettres",
+    "PASSWORD": "De 3 à 50, lettres et chiffres avec possible @$!%*?&",
+    "CHEST_CODE": "Un code alpha-numérique",
+    "CHEST_LABEL": "De 3 à 50, lettres y compris avec accent, espace et chiffres avec possibleblement _-'./+@$!%*?&",
+    "CHEST_KEY": "De 3 à 50, lettres y compris avec accent et chiffres avec possibleblement _-'./+@$!%*?&",
+    "CHEST_DESCRIPTION": "De 3 à 250, lettres y compris avec accent, espace et chiffres avec possibleblement _-'./+@$!%*?&"
   }
 }

@@ -15,7 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from 'react-i18next';
 
 import '@presentation/molecule/bar.scss';
-import { ContextStoreModel, contextStore } from '@presentation/contextStore';
+import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
 
 const pages = ['bank', 'password'];
 const settings = ['profile', 'logout'];

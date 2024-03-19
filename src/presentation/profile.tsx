@@ -7,12 +7,12 @@ import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 import { Chip, Grid, InputAdornment, TextField } from '@mui/material';
 
 import '@presentation/common.scss';
-import Bar from '@src/presentation/molecule/bar';
+import Bar from '@presentation/molecule/bar';
 import { CODES } from '@src/common/codes';
-import { Footer } from '@src/presentation/molecule/footer';
+import { Footer } from '@presentation/molecule/footer';
 import inversify from '@src/common/inversify';
-import { FlashStore, flashStore} from '@src/presentation/molecule/flash';
-import { ContextStoreModel, contextStore } from '@presentation/contextStore';
+import { FlashStore, flashStore} from '@presentation/molecule/flash';
+import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
 import { UpdPasswordUsecaseModel } from '@usecase/updPassword/updPassword.usecase.model';
 
 export const Profile = () => {

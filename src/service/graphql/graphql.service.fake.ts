@@ -109,6 +109,37 @@ export class GraphqlServiceFake implements GraphqlService {
           ]
         }
       });
+    } else if (datas.operationName === 'create_chest') {
+      return Promise.resolve({
+        "data": {
+          "create_chest": {
+            "id": "65e0bb411a54812572091e49",
+            "label": "Coffre",
+            "description": "Coffre de test",
+            "author_id": "65da139c45e382cdb661379f",
+            "author": {
+              "id": "65da139c45e382cdb661379f",
+              "code": "user1"
+            },
+            "members": [
+              {
+                "user_id": "65da139c45e382cdb661379f",
+                "user": {
+                  "id": "65da139c45e382cdb661379f",
+                  "code": "user1"
+                }
+              },
+              {
+                "user_id": "65da139c45e382cdb661379g",
+                "user": {
+                  "id": "65da139c45e382cdb661379g",
+                  "code": "user2"
+                }
+              }
+            ]
+          }
+        }
+      });
     }
 
     throw new Error('Method not implemented.');

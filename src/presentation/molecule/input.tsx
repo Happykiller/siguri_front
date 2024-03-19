@@ -11,6 +11,7 @@ export const Input = (props:any) => {
     valid: false
   });
   const [passVisible, setPassVisible] = React.useState(false);
+  const [virgin, setVirgin] = React.useState(props.virgin??false);
 
   const label = <>{props.label??''}{props.require?'*':''}</>;
 
@@ -31,7 +32,7 @@ export const Input = (props:any) => {
     let response = true;
     if (props.require && value.length === 0) {
       response = false;
-    } else if (props.regex) {
+    } else if (props.regex && value.length !== 0) {
       const regex = new RegExp(props.regex, 'g');
       response = (!!value.match(regex));
     }
@@ -40,8 +41,8 @@ export const Input = (props:any) => {
   }
 
   const giveHelper = () => {
-    if (props.require && !state.valid) {
-      return <Trans>Champs obligatoire</Trans>
+    if (!virgin && props.require && !state.valid) {
+      return <Trans>common.field_incorrect</Trans>
     }
 
     return null;
@@ -54,12 +55,14 @@ export const Input = (props:any) => {
         variant="standard"
         size="small"
         autoComplete='false'
+        fullWidth={props.fullWidth}
         type={(passVisible)?'text':'password'}
-        error={!state.valid}
+        error={!virgin && !state.valid}
         value={state.value}
         helperText={giveHelper()}
         onChange={(e) => { 
           e.preventDefault();
+          setVirgin(false);
           const isValid = calcValid(e.target.value);
           setState({
             value: e.target.value,
@@ -103,11 +106,13 @@ export const Input = (props:any) => {
         size="small"
         autoComplete='false'
         type={typeBase}
-        error={!state.valid}
+        fullWidth={props.fullWidth}
+        error={!virgin && !state.valid}
         value={state.value}
         helperText={giveHelper()}
         onChange={(e) => { 
           e.preventDefault();
+          setVirgin(false);
           const isValid = calcValid(e.target.value);
           setState({
             value: e.target.value,
