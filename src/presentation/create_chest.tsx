@@ -163,7 +163,7 @@ export const CreateChest = () => {
                     label={<Trans>create_chest.description</Trans>}
                     tooltip={<Trans>REGEX.CHEST_DESCRIPTION</Trans>}
                     regex={REGEX.CHEST_DESCRIPTION}
-                    entity={formEntities.key}
+                    entity={formEntities.description}
                     onChange={(entity:any) => { 
                       setFormEntities({
                         ... formEntities,

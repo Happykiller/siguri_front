@@ -5,9 +5,11 @@ import { createSearchParams, useNavigate, useSearchParams } from 'react-router-d
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 import { CODES } from '@src/common/codes';
+import { REGEX } from '@src/common/REGEX';
 import Bar from '@presentation/molecule/bar';
 import inversify from '@src/common/inversify';
 import { THING_TYPES } from '@src/common/thingTypes';
+import { Input } from '@presentation/molecule/input';
 import { Footer } from '@presentation/molecule/footer';
 import { FlashStore, flashStore} from '@presentation/molecule/flash';
 import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
@@ -21,6 +23,40 @@ export const CreateThing = () => {
   const chest_id = searchParams.get('chest_id');
   const context:ContextStoreModel = contextStore();
   const chest_label = searchParams.get('chest_label');
+  const [formEntities, setFormEntities] = React.useState({
+    label: {
+      value: '',
+      valid: false
+    },
+    description: {
+      value: '',
+      valid: false
+    },
+    code: {
+      value: '',
+      valid: false
+    },
+    note: {
+      value: '',
+      valid: false
+    },
+    totp: {
+      value: '',
+      valid: false
+    },
+    login: {
+      value: '',
+      valid: false
+    },
+    password: {
+      value: '',
+      valid: false
+    },
+    address: {
+      value: '',
+      valid: false
+    }
+  });
   const [thingTotp, setThingTotp] = React.useState('');
   const [thingType, setThingType] = React.useState('');
   const [thingCode, setThingCode] = React.useState('');
@@ -144,17 +180,22 @@ export const CreateThing = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
             label={<Trans>thing.label</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingLabel}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingLabel(e.target.value);
+            tooltip={<Trans>REGEX.THING_LABEL</Trans>}
+            regex={REGEX.THING_LABEL}
+            entity={formEntities.label}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                label: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -166,17 +207,23 @@ export const CreateThing = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
+            fullWidth
             label={<Trans>thing.description</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingDescription}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingDescription(e.target.value);
+            tooltip={<Trans>REGEX.THING_DESCRIPTION</Trans>}
+            regex={REGEX.THING_DESCRIPTION}
+            entity={formEntities.description}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                description: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -217,17 +264,23 @@ export const CreateThing = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
+            fullWidth
             label={<Trans>thing.code</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingCode}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingCode(e.target.value);
+            tooltip={<Trans>REGEX.THING_CODE</Trans>}
+            regex={REGEX.THING_DESCRIPTION}
+            entity={formEntities.code}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                code: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -239,22 +292,25 @@ export const CreateThing = () => {
           alignItems="center"
           display={thingType !== THING_TYPES.NOTE ? "none" : "flex"}
         >
-          <TextField
+          <Input
+            fullWidth
             multiline
             rows={4}
-            sx={{ 
-              marginRight:1,
-              width: '300px'
-            }}
             label={<Trans>thing.note</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingNote}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingNote(e.target.value);
+            tooltip={<Trans>THING.THING_NOTE</Trans>}
+            regex={REGEX.THING_NOTE}
+            entity={formEntities.note}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                note: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -266,16 +322,22 @@ export const CreateThing = () => {
           alignItems="center"
           display={thingType !== THING_TYPES.TOTP ? "none" : "flex"}
         >
-          <TextField
+          <Input
             label={<Trans>thing.totp</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingTotp}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingTotp(e.target.value);
+            tooltip={<Trans>REGEX.THING_TOTP</Trans>}
+            regex={REGEX.THING_TOTP}
+            entity={formEntities.totp}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                totp: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -287,17 +349,22 @@ export const CreateThing = () => {
           alignItems="center"
           display={thingType !== THING_TYPES.CREDENTIAL ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
             label={<Trans>thing.login</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingLogin}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingLogin(e.target.value);
+            tooltip={<Trans>REGEX.THING_LOGIN</Trans>}
+            regex={REGEX.THING_LOGIN}
+            entity={formEntities.login}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                login: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -309,17 +376,22 @@ export const CreateThing = () => {
           alignItems="center"
           display={thingType !== THING_TYPES.CREDENTIAL ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
             label={<Trans>thing.password</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingPassword}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingPassword(e.target.value);
+            tooltip={<Trans>REGEX.THING_PASSWORD</Trans>}
+            regex={REGEX.THING_PASSWORD}
+            entity={formEntities.password}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                password: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -331,17 +403,23 @@ export const CreateThing = () => {
           alignItems="center"
           display={thingType !== THING_TYPES.CREDENTIAL ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
+            fullWidth
             label={<Trans>thing.address</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingAddress}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingAddress(e.target.value);
+            tooltip={<Trans>REGEX.THING_ADDRESS</Trans>}
+            regex={REGEX.THING_ADDRESS}
+            entity={formEntities.address}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                address: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 

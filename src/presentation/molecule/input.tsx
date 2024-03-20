@@ -56,6 +56,9 @@ export const Input = (props:any) => {
         size="small"
         autoComplete='false'
         fullWidth={props.fullWidth}
+        multiline={props.multiline}
+        rows={props.rows}
+        sx={props.sx}
         type={(passVisible)?'text':'password'}
         error={!virgin && !state.valid}
         value={state.value}
@@ -107,6 +110,9 @@ export const Input = (props:any) => {
         autoComplete='false'
         type={typeBase}
         fullWidth={props.fullWidth}
+        multiline={props.multiline}
+        rows={props.rows}
+        sx={props.sx}
         error={!virgin && !state.valid}
         value={state.value}
         helperText={giveHelper()}
