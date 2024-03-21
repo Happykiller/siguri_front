@@ -91,6 +91,9 @@
     "created": "Coffre créé",
     "CREATE_CHEST_FAIL": "Echec de la création"
   },
+  "edit_chest": {
+    "title": "Editer le coffre"
+  },
   "error": {
     "credentials_wrong": "Identification impossible"
   },
@@ -140,10 +143,11 @@
     "login": "Entrer votre identifiant",
     "password": "Entrer votre mot de passe",
     "address": "Entrer l'adresse",
-    "number": "Entrer votre numéro",
-    "crypto": "Entrer votre cryptograme",
-    "cbName": "Entrer le nom",
-    "expirationDate": "Date d'expiration",
+    "cb_number": "Entrer votre numéro",
+    "cb_crypto": "Entrer votre cryptograme",
+    "cb_name": "Entrer le nom",
+    "cb_code": "Entrer votre code",
+    "cb_expiration_date": "Date d'expiration",
     "CREATE_THING_FAIL": "Erreur lors de la création",
     "created": "Création réussi",
     "totp": "TOTP"
@@ -175,6 +179,11 @@
     "THING_TOTP": "De 3 à 50, lettres et des chiffres de 2-7",
     "THING_LOGIN": "De 1 à 250, lettres y compris avec accent, espace et chiffres avec possibleblement _-'./+@$!%*?&#\"",
     "THING_PASSWORD": "De 1 à 250, lettres y compris avec accent, espace et chiffres avec possibleblement _-'./+@$!%*?&#\"",
-    "THING_ADDRESS": "IP ou URL, de 3 à 250, lettres, chiffres avec possibleblement _-./+@$!%*?&#"
+    "THING_ADDRESS": "IP ou URL, de 3 à 250, lettres, chiffres avec possibleblement _-./+@$!%*?&#",
+    "THING_CB_NUMBER": "Des chiffres avec possiblement des espaces",
+    "THING_CB_CODE": "4 chiffres",
+    "THING_CB_CRYPTO": "3 chiffres",
+    "THING_CB_NAME": "De 3 à 50 lettres avec possiblement des espaces",
+    "THING_CB_EXPIRATION_DATE": "Des chiffres avec un espace ou - ou -, exemple 02/24"
   }
 }

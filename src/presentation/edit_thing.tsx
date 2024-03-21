@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { Add } from '@mui/icons-material';
+import { Button, Grid } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
-import { Button, Grid, TextField } from '@mui/material';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { CODES } from '@src/common/codes';
+import { REGEX } from '@src/common/REGEX';
 import Bar from '@presentation/molecule/bar';
 import inversify from '@src/common/inversify';
 import { THING_TYPES } from '@src/common/thingTypes';
+import { Input } from '@presentation/molecule/input';
 import { Footer } from '@presentation/molecule/footer';
-import ThingUsecaseModel from '@usecase/model/thing.usecase.model';
 import { FlashStore, flashStore} from '@presentation/molecule/flash';
 import GetThingUsecaseModel from '@usecase/getThing/getThing.usecase.model';
 import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
@@ -26,13 +27,118 @@ export const EditThing = () => {
   const thing_id = searchParams.get('thing_id');
   const context:ContextStoreModel = contextStore();
   const chest_label = searchParams.get('chest_label');
-  const [thing, setThing] = React.useState<ThingUsecaseModel>(null);
+  const [formEntities, setFormEntities] = React.useState({
+    id: {
+      value: '',
+      valid: false
+    },
+    label: {
+      value: '',
+      valid: false
+    },
+    description: {
+      value: '',
+      valid: false
+    },
+    type: {
+      value: '',
+      valid: false
+    },
+    code: {
+      value: '',
+      valid: false
+    },
+    note: {
+      value: '',
+      valid: false
+    },
+    totp: {
+      value: '',
+      valid: false
+    },
+    login: {
+      value: '',
+      valid: false
+    },
+    password: {
+      value: '',
+      valid: false
+    },
+    address: {
+      value: '',
+      valid: false
+    },
+    cb_number: {
+      value: '',
+      valid: false
+    },
+    cb_code: {
+      value: '',
+      valid: false
+    },
+    cb_crypto: {
+      value: '',
+      valid: false
+    },
+    cb_name: {
+      value: '',
+      valid: false
+    },
+    cb_expiration_date: {
+      value: '',
+      valid: false
+    }
+  });
   const secret = context.chests_secret?.find((elt) => elt.id === searchParams.get('chest_id'))?.secret ?? '';
   const [qry, setQry] = React.useState({
     loading: false,
     data: null,
     error: null
   });
+
+  const formIsValid = () => {
+    if (!formEntities.label.valid || !formEntities.description.valid) {
+      return false;
+    }
+
+    if ((formEntities.type.value === THING_TYPES.CB) && (
+      !formEntities.cb_code.valid 
+      || !formEntities.cb_crypto.valid
+      || !formEntities.cb_expiration_date.valid
+      || !formEntities.cb_name.valid
+      || !formEntities.cb_number.valid
+    )) {
+      return false;
+    }
+
+    if ((formEntities.type.value === THING_TYPES.CODE) && (
+      !formEntities.code.valid
+    )) {
+      return false;
+    }
+
+    if ((formEntities.type.value === THING_TYPES.CREDENTIAL) && (
+      !formEntities.login.valid 
+      || !formEntities.password.valid 
+      || !formEntities.address.valid
+    )) {
+      return false;
+    }
+
+    if ((formEntities.type.value === THING_TYPES.NOTE) && (
+      !formEntities.note.valid
+    )) {
+      return false;
+    }
+
+    if ((formEntities.type.value === THING_TYPES.TOTP) && (
+      !formEntities.totp.valid
+    )) {
+      return false;
+    }
+
+    return true;
+  }
 
   const handleUpdateThing = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -41,8 +147,45 @@ export const EditThing = () => {
       loading: true
     }));
 
+    let dto:any = {
+      id: formEntities.id.value,
+      label: formEntities.label.value,
+      chest_id: chest_id,
+      chest_secret: secret,
+      description: formEntities.description.value,
+      type: formEntities.type
+    };
+
+    if(formEntities.type.value === THING_TYPES.CB) {
+      dto.cb = {
+        code: formEntities.cb_code.value,
+        label: formEntities.cb_name.value,
+        number: formEntities.cb_number.value,
+        expiration_date: formEntities.cb_expiration_date.value,
+        crypto: formEntities.cb_crypto.value,
+      }
+    } else if(formEntities.type.value === THING_TYPES.NOTE) {
+      dto.note = {
+        note: formEntities.note.value
+      }
+    } else if(formEntities.type.value === THING_TYPES.CODE) {
+      dto.code = {
+        code: formEntities.code.value
+      }
+    } else if(formEntities.type.value === THING_TYPES.CREDENTIAL) {
+      dto.credential = {
+        id: formEntities.login.value,
+        password: formEntities.password.value,
+        address: formEntities.address.value,
+      }
+    } else if(formEntities.type.value === THING_TYPES.TOTP) {
+      dto.totp = {
+        secret: formEntities.totp.value
+      }
+    }
+
     inversify.updateThingUsecase.execute({
-      ... thing,
+      ... dto,
       chest_secret: secret
     })
       .then((response:UpdateThingUsecaseModel) => {
@@ -84,7 +227,7 @@ export const EditThing = () => {
     }));
 
     inversify.deleteThingUsecase.execute({
-      thing_id: thing.id,
+      thing_id: formEntities.id.value,
       chest_secret: secret
     })
       .then((response:DeleteThingUsecaseModel) => {
@@ -128,7 +271,7 @@ export const EditThing = () => {
 
   if (qry.loading) {
     content = <Trans>common.loading</Trans>;
-  } else if (!thing && !qry.error) {
+  } else if (!formEntities.id.valid && !qry.error) {
     setQry(qry => ({
       ...qry,
       loading: true
@@ -136,12 +279,73 @@ export const EditThing = () => {
     inversify.getThingUsecase.execute({
       thing_id,
       chest_secret: secret
-    })
-      .then((response:GetThingUsecaseModel) => {
+    }).then((response:GetThingUsecaseModel) => {
         if(response.message === CODES.SUCCESS) {
-          setThing(response.data);
+          setFormEntities({
+            id: {
+              value: response.data.id,
+              valid: true
+            },
+            label: {
+              value: response.data.label,
+              valid: true
+            },
+            description: {
+              value: response.data.description,
+              valid: true
+            },
+            type: {
+              value: response.data.type,
+              valid: true
+            },
+            code: {
+              value: (response.data.type === THING_TYPES.CODE)?response.data.code.code:'',
+              valid: (response.data.type === THING_TYPES.CODE)?true:false
+            },
+            note: {
+              value: (response.data.type === THING_TYPES.NOTE)?response.data.note.note:'',
+              valid: (response.data.type === THING_TYPES.NOTE)?true:false
+            },
+            totp: {
+              value: (response.data.type === THING_TYPES.TOTP)?response.data.totp.secret:'',
+              valid: (response.data.type === THING_TYPES.TOTP)?true:false
+            },
+            login: {
+              value: (response.data.type === THING_TYPES.CREDENTIAL)?response.data.credential.id:'',
+              valid: (response.data.type === THING_TYPES.CREDENTIAL)?true:false
+            },
+            password: {
+              value: (response.data.type === THING_TYPES.CREDENTIAL)?response.data.credential.password:'',
+              valid: (response.data.type === THING_TYPES.CREDENTIAL)?true:false
+            },
+            address: {
+              value: (response.data.type === THING_TYPES.CREDENTIAL)?response.data.credential.address:'',
+              valid: (response.data.type === THING_TYPES.CREDENTIAL)?true:false
+            },
+            cb_number: {
+              value: (response.data.type === THING_TYPES.CB)?response.data.cb.number:'',
+              valid: (response.data.type === THING_TYPES.CB)?true:false
+            },
+            cb_code: {
+              value: (response.data.type === THING_TYPES.CB)?response.data.cb.code:'',
+              valid: (response.data.type === THING_TYPES.CB)?true:false
+            },
+            cb_crypto: {
+              value: (response.data.type === THING_TYPES.CB)?response.data.cb.crypto:'',
+              valid: (response.data.type === THING_TYPES.CB)?true:false
+            },
+            cb_name: {
+              value: (response.data.type === THING_TYPES.CB)?response.data.cb.label:'',
+              valid: (response.data.type === THING_TYPES.CB)?true:false
+            },
+            cb_expiration_date: {
+              value: (response.data.type === THING_TYPES.CB)?response.data.cb.expiration_date:'',
+              valid: (response.data.type === THING_TYPES.CB)?true:false
+            }
+          });
         } else {
           inversify.loggerService.debug(response.error);
+          flash.open(t(`edit_thing.${response.message}`));
           setQry(qry => ({
             ...qry,
             error: response.message
@@ -149,6 +353,8 @@ export const EditThing = () => {
         }
       })
       .catch((error:any) => {
+        inversify.loggerService.debug(error.error);
+        flash.open(t(`edit_thing.${error.message}`));
         setQry(qry => ({
           ...qry,
           error: error.message
@@ -177,20 +383,22 @@ export const EditThing = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
             label={<Trans>thing.label</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.label}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
-                label: e.target.value
+            tooltip={<Trans>REGEX.THING_LABEL</Trans>}
+            regex={REGEX.THING_LABEL}
+            entity={formEntities.label}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                label: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -202,20 +410,22 @@ export const EditThing = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
             label={<Trans>thing.description</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.description}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
-                description: e.target.value
+            tooltip={<Trans>REGEX.THING_DESCRIPTION</Trans>}
+            regex={REGEX.THING_DESCRIPTION}
+            entity={formEntities.description}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                description: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -223,26 +433,27 @@ export const EditThing = () => {
         <Grid 
           xs={12}
           item
-          display={thing.type !== THING_TYPES.CODE ? "none" : "flex"}
+          display={formEntities.type.value !== THING_TYPES.CODE ? "none" : "flex"}
           justifyContent="center"
           alignItems="center"
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
+            fullWidth
             label={<Trans>thing.code</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.code?.code}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
+            tooltip={<Trans>REGEX.THING_CODE</Trans>}
+            regex={REGEX.THING_CODE}
+            entity={formEntities.code}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
                 code: {
-                  code: e.target.value
+                  value: entity.value,
+                  valid: entity.valid
                 }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -250,26 +461,26 @@ export const EditThing = () => {
         <Grid 
           xs={12}
           item
-          display={thing.type !== THING_TYPES.TOTP ? "none" : "flex"}
+          display={formEntities.type.value !== THING_TYPES.TOTP ? "none" : "flex"}
           justifyContent="center"
           alignItems="center"
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
             label={<Trans>thing.totp</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.totp?.secret}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
+            tooltip={<Trans>REGEX.THING_TOTP</Trans>}
+            regex={REGEX.THING_TOTP}
+            entity={formEntities.totp}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
                 totp: {
-                  secret: e.target.value
+                  value: entity.value,
+                  valid: entity.valid
                 }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -279,29 +490,27 @@ export const EditThing = () => {
           item
           justifyContent="center"
           alignItems="center"
-          display={thing.type !== THING_TYPES.NOTE ? "none" : "flex"}
+          display={formEntities.type.value !== THING_TYPES.NOTE ? "none" : "flex"}
         >
-          <TextField
+          <Input
+            fullWidth
             multiline
             rows={4}
-            sx={{ 
-              marginRight:1,
-              width: '300px'
-            }}
             label={<Trans>thing.note</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.note?.note}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
+            tooltip={<Trans>THING.THING_NOTE</Trans>}
+            regex={REGEX.THING_NOTE}
+            entity={formEntities.note}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
                 note: {
-                  note: e.target.value
+                  value: entity.value,
+                  valid: entity.valid
                 }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -311,25 +520,24 @@ export const EditThing = () => {
           item
           justifyContent="center"
           alignItems="center"
-          display={thing.type !== THING_TYPES.CREDENTIAL ? "none" : "flex"}
+          display={formEntities.type.value !== THING_TYPES.CREDENTIAL ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
             label={<Trans>thing.login</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.credential?.id}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
-                credential: {
-                  ...thing.credential,
-                  id: e.target.value
+            tooltip={<Trans>REGEX.THING_LOGIN</Trans>}
+            regex={REGEX.THING_LOGIN}
+            entity={formEntities.login}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                login: {
+                  value: entity.value,
+                  valid: entity.valid
                 }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -339,25 +547,24 @@ export const EditThing = () => {
           item
           justifyContent="center"
           alignItems="center"
-          display={thing.type !== THING_TYPES.CREDENTIAL ? "none" : "flex"}
+          display={formEntities.type.value !== THING_TYPES.CREDENTIAL ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
             label={<Trans>thing.password</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.credential?.password}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
-                credential: {
-                  ...thing.credential,
-                  password: e.target.value
+            tooltip={<Trans>REGEX.THING_PASSWORD</Trans>}
+            regex={REGEX.THING_PASSWORD}
+            entity={formEntities.password}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                password: {
+                  value: entity.value,
+                  valid: entity.valid
                 }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -367,25 +574,25 @@ export const EditThing = () => {
           item
           justifyContent="center"
           alignItems="center"
-          display={thing.type !== THING_TYPES.CREDENTIAL ? "none" : "flex"}
+          display={formEntities.type.value !== THING_TYPES.CREDENTIAL ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
+          <Input
+            fullWidth
             label={<Trans>thing.address</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.credential?.address}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
-                credential: {
-                  ...thing.credential,
-                  address: e.target.value
+            tooltip={<Trans>REGEX.THING_ADDRESS</Trans>}
+            regex={REGEX.THING_ADDRESS}
+            entity={formEntities.address}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                address: {
+                  value: entity.value,
+                  valid: entity.valid
                 }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -395,25 +602,24 @@ export const EditThing = () => {
           item
           justifyContent="center"
           alignItems="center"
-          display={thing.type !== THING_TYPES.CB ? "none" : "flex"}
+          display={formEntities.type.value !== THING_TYPES.CB ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
-            label={<Trans>thing.number</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.cb?.number}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
-                cb: {
-                  ...thing.cb,
-                  number: e.target.value
+          <Input
+            label={<Trans>thing.cb_number</Trans>}
+            tooltip={<Trans>REGEX.THING_CB_NUMBER</Trans>}
+            regex={REGEX.THING_CB_NUMBER}
+            entity={formEntities.cb_number}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                cb_number: {
+                  value: entity.value,
+                  valid: entity.valid
                 }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -423,25 +629,25 @@ export const EditThing = () => {
           item
           justifyContent="center"
           alignItems="center"
-          display={thing.type !== THING_TYPES.CB ? "none" : "flex"}
+          display={formEntities.type.value !== THING_TYPES.CB ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
-            label={<Trans>thing.code</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.cb?.code}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
-                cb: {
-                  ...thing.cb,
-                  code: e.target.value
+          <Input
+            label={<Trans>thing.cb_code</Trans>}
+            tooltip={<Trans>REGEX.THING_CB_CODE</Trans>}
+            regex={REGEX.THING_CB_CODE}
+            type="number"
+            entity={formEntities.cb_number}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                cb_code: {
+                  value: entity.value,
+                  valid: entity.valid
                 }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -451,25 +657,25 @@ export const EditThing = () => {
           item
           justifyContent="center"
           alignItems="center"
-          display={thing.type !== THING_TYPES.CB ? "none" : "flex"}
+          display={formEntities.type.value !== THING_TYPES.CB ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
-            label={<Trans>thing.crypto</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.cb?.crypto}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
-                cb: {
-                  ...thing.cb,
-                  crypto: e.target.value
+          <Input
+            label={<Trans>thing.cb_crypto</Trans>}
+            tooltip={<Trans>REGEX.THING_CB_CRYPTO</Trans>}
+            regex={REGEX.THING_CB_CRYPTO}
+            type="number"
+            entity={formEntities.cb_crypto}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                cb_crypto: {
+                  value: entity.value,
+                  valid: entity.valid
                 }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -479,25 +685,24 @@ export const EditThing = () => {
           item
           justifyContent="center"
           alignItems="center"
-          display={thing.type !== THING_TYPES.CB ? "none" : "flex"}
+          display={formEntities.type.value !== THING_TYPES.CB ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
-            label={<Trans>thing.cbName</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.cb?.label}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
-                cb: {
-                  ...thing.cb,
-                  label: e.target.value
+          <Input
+            label={<Trans>thing.cb_name</Trans>}
+            tooltip={<Trans>REGEX.THING_CB_NAME</Trans>}
+            regex={REGEX.THING_CB_NAME}
+            entity={formEntities.cb_name}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                cb_name: {
+                  value: entity.value,
+                  valid: entity.valid
                 }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -505,27 +710,26 @@ export const EditThing = () => {
         <Grid 
           xs={6}
           item
-          display={thing.type !== THING_TYPES.CB ? "none" : "flex"}
+          display={formEntities.type.value !== THING_TYPES.CB ? "none" : "flex"}
           justifyContent="center"
           alignItems="center"
         >
-          <TextField
-            sx={{ marginRight:1 }}
-            label={<Trans>thing.expirationDate</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thing.cb?.expiration_date}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThing({
-                ... thing,
-                cb: {
-                  ...thing.cb,
-                  expiration_date: e.target.value
+          <Input
+            label={<Trans>thing.cb_expiration_date</Trans>}
+            tooltip={<Trans>REGEX.THING_CB_EXPIRATION_DATE</Trans>}
+            regex={REGEX.THING_CB_EXPIRATION_DATE}
+            entity={formEntities.cb_expiration_date}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                cb_expiration_date: {
+                  value: entity.value,
+                  valid: entity.valid
                 }
               });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -543,7 +747,7 @@ export const EditThing = () => {
             variant="contained"
             size="small"
             startIcon={<Add />}
-            disabled={!(thing.label.length > 2 && thing.description.length > 2)}
+            disabled={!formIsValid()}
           ><Trans>editThing.update</Trans></Button>
         </Grid>
 

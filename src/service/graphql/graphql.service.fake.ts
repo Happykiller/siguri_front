@@ -140,6 +140,74 @@ export class GraphqlServiceFake implements GraphqlService {
           }
         }
       });
+    } else if (datas.operationName === 'thing') {
+      return Promise.resolve({
+        "data": {
+          "thing": {
+            "id": "65e0bc221a54812572091e53",
+            "label": "Test",
+            "description": "Test",
+            "author": {
+              "id": "65da139c45e382cdb661379f",
+              "code": "user1"
+            },
+            "chest": {
+              "id": "65e0bb411a54812572091e49",
+              "label": "Coffre"
+            },
+            "type": "CODE",
+            "cb": null,
+            "code": {
+              "code": "clé 4242 clé"
+            },
+            "credential": null,
+            "note": null,
+            "totp": null
+          }
+        }
+      });
+    } else if (datas.operationName === 'update_thing') {
+      return Promise.resolve({
+        "data": {
+          "update_thing": {
+            "id": "65e0bc221a54812572091e53",
+            "label": "Test",
+            "description": "Test",
+            "author": {
+              "id": "65da139c45e382cdb661379f",
+              "code": "user1"
+            },
+            "chest": {
+              "id": "65e0bb411a54812572091e49",
+              "label": "Coffre"
+            },
+            "type": "CODE",
+            "cb": null,
+            "code": {
+              "code": "clé 4242 clé"
+            },
+            "credential": null,
+            "note": null,
+            "totp": null
+          }
+        }
+      });
+    } else if (datas.operationName === 'delete_thing') {
+      return Promise.resolve({
+        "data": {
+          "delete_thing": {
+            "id": "65e0bc221a54812572091e53"
+          }
+        }
+      });
+    } else if (datas.operationName === 'leave_chest') {
+      return Promise.resolve({
+        "data": {
+          "leave_chest": {
+            "id": "65e0bc221a54812572091e53"
+          }
+        }
+      });
     }
 
     throw new Error('Method not implemented.');

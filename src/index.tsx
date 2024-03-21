@@ -15,6 +15,7 @@ import Flash from '@presentation/molecule/flash';
 import { Password } from '@presentation/password';
 import { Guard } from '@presentation/molecule/guard';
 import { EditThing } from '@presentation/edit_thing';
+import { EditChest } from '@presentation/edit_chest';
 import { CreateThing } from '@presentation/create_thing';
 import { CreateChest } from '@presentation/create_chest';
 
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
   {
     path: "/create_chest",
     element: <Guard><CreateChest /></Guard>,
+  },
+  {
+    path: "/edit_chest",
+    element: <Guard><EditChest /></Guard>,
   },
   {
     path: "/profile",

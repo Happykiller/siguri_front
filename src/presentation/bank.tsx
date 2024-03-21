@@ -1,5 +1,6 @@
 import * as React from 'react';
 import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
 import LoginIcon from '@mui/icons-material/Login';
 import ShareIcon from '@mui/icons-material/Share';
 import GroupIcon from '@mui/icons-material/Group';
@@ -88,6 +89,19 @@ export const Bank = () => {
     });
   }
 
+  const editChest = (dto:{
+    chest_id: string,
+    label: string
+  }) => {
+    navigate({
+      pathname: '/edit_chest',
+      search: createSearchParams({
+        chest_id: dto.chest_id,
+        chest_label: dto.label
+      }).toString()
+    });
+  }
+
   const share = (dto:{
     chest_id: string,
     label: string
@@ -158,9 +172,6 @@ export const Bank = () => {
   {/* Table */}
   <Grid
     container
-    sx={{
-      minWidth: "350px"
-    }}
   >
     <Grid
       container
@@ -193,8 +204,8 @@ export const Bank = () => {
       </Grid>
       <Grid
         item
-        xs={6}
-        md={5}
+        xs={5}
+        md={4}
         display="flex"
         justifyContent="center"
         alignItems="center"
@@ -203,8 +214,11 @@ export const Bank = () => {
       </Grid>
       <Grid
         item
-        xs={2}
-        md={2}
+        xs={3}
+        md={3}
+        sx={{
+          width: '130px'
+        }}
       >
       </Grid>
     </Grid>
@@ -242,8 +256,8 @@ export const Bank = () => {
         </Grid>
         <Grid 
           item
-          xs={6}
-          md={5}
+          xs={5}
+          md={4}
           display="flex"
           justifyContent="center"
           alignItems="center"
@@ -252,10 +266,10 @@ export const Bank = () => {
           <Typography noWrap>{chest.description}</Typography>
         </Grid>
         <Grid
-          xs={2}
-          md={2}
+          xs={3}
+          md={3}
           sx={{
-            paddingRight: '15px'
+            width: '130px'
           }}
           item
           display="flex"
@@ -281,7 +295,7 @@ export const Bank = () => {
 
           {/* Share  */}
           <IconButton 
-            title="Partager le coffre"
+            title={t('bank.share')}
             onClick={(e) => {
             e.preventDefault();
             share({
@@ -292,9 +306,22 @@ export const Bank = () => {
             <ShareIcon />
           </IconButton>
 
+          {/* Edit  */}
+          <IconButton 
+            title={t('bank.edit')}
+            onClick={(e) => {
+            e.preventDefault();
+            editChest({
+              chest_id: chest.id,
+              label: chest.label
+            })
+          }}>
+            <EditIcon />
+          </IconButton>
+
           {/* Enter  */}
           <IconButton 
-            title="Entrer dans le coffre"
+            title={t('bank.enter')}
             onClick={(e) => {
             e.preventDefault();
             joinChest({

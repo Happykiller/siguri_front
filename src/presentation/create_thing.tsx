@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Add } from '@mui/icons-material';
 import { Trans, useTranslation } from 'react-i18next';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
 
 import { CODES } from '@src/common/codes';
 import { REGEX } from '@src/common/REGEX';
@@ -55,22 +55,29 @@ export const CreateThing = () => {
     address: {
       value: '',
       valid: false
+    },
+    cb_number: {
+      value: '',
+      valid: false
+    },
+    cb_code: {
+      value: '',
+      valid: false
+    },
+    cb_crypto: {
+      value: '',
+      valid: false
+    },
+    cb_name: {
+      value: '',
+      valid: false
+    },
+    cb_expiration_date: {
+      value: '',
+      valid: false
     }
   });
-  const [thingTotp, setThingTotp] = React.useState('');
   const [thingType, setThingType] = React.useState('');
-  const [thingCode, setThingCode] = React.useState('');
-  const [thingNote, setThingNote] = React.useState('');
-  const [thingLogin, setThingLogin] = React.useState('');
-  const [thingLabel, setThingLabel] = React.useState('');
-  const [thingCbCode, setThingCbCode] = React.useState('');
-  const [thingNumber, setThingNumber] = React.useState('');
-  const [thingCrypto, setThingCrypto] = React.useState('');
-  const [thingCbName, setThingCbName] = React.useState('');
-  const [thingAddress, setThingAddress] = React.useState('');
-  const [thingPassword, setThingPassword] = React.useState('');
-  const [thingDescription, setThingDescription] = React.useState('');
-  const [thingExepirationDate, setThingExepirationDate] = React.useState('');
   const secret = context.chests_secret?.find((elt) => elt.id === searchParams.get('chest_id'))?.secret ?? '';
   const [qry, setQry] = React.useState({
     loading: false,
@@ -86,38 +93,38 @@ export const CreateThing = () => {
     }));
 
     let dto:any = {
-      label: thingLabel,
+      label: formEntities.label.value,
       chest_id: chest_id,
       chest_secret: secret,
-      description: thingDescription,
+      description: formEntities.description.value,
       type: thingType
     };
 
     if(thingType === THING_TYPES.CB) {
       dto.cb = {
-        code: thingCbCode,
-        label: thingLabel,
-        number: thingNumber,
-        expiration_date: thingExepirationDate,
-        crypto: thingCrypto,
+        code: formEntities.cb_code.value,
+        label: formEntities.cb_name.value,
+        number: formEntities.cb_number.value,
+        expiration_date: formEntities.cb_expiration_date.value,
+        crypto: formEntities.cb_crypto.value,
       }
     } else if(thingType === THING_TYPES.NOTE) {
       dto.note = {
-        note: thingNote
+        note: formEntities.note.value
       }
     } else if(thingType === THING_TYPES.CODE) {
       dto.code = {
-        code: thingCode
+        code: formEntities.code.value
       }
     } else if(thingType === THING_TYPES.CREDENTIAL) {
       dto.credential = {
-        id: thingLogin,
-        password: thingPassword,
-        address: thingAddress,
+        id: formEntities.login.value,
+        password: formEntities.password.value,
+        address: formEntities.address.value,
       }
     } else if(thingType === THING_TYPES.TOTP) {
       dto.totp = {
-        secret: thingTotp
+        secret: formEntities.totp.value
       }
     }
 
@@ -152,6 +159,50 @@ export const CreateThing = () => {
           loading: false
         }));
       });
+  }
+
+  const formIsValid = () => {
+    if (thingType === '' || !formEntities.label.valid || !formEntities.description.valid) {
+      return false;
+    }
+
+    if ((thingType === THING_TYPES.CB) && (
+      !formEntities.cb_code.valid 
+      || !formEntities.cb_crypto.valid
+      || !formEntities.cb_expiration_date.valid
+      || !formEntities.cb_name.valid
+      || !formEntities.cb_number.valid
+    )) {
+      return false;
+    }
+
+    if ((thingType === THING_TYPES.CODE) && (
+      !formEntities.code.valid
+    )) {
+      return false;
+    }
+
+    if ((thingType === THING_TYPES.CREDENTIAL) && (
+      !formEntities.login.valid 
+      || !formEntities.password.valid 
+      || !formEntities.address.valid
+    )) {
+      return false;
+    }
+
+    if ((thingType === THING_TYPES.NOTE) && (
+      !formEntities.note.valid
+    )) {
+      return false;
+    }
+
+    if ((thingType === THING_TYPES.TOTP) && (
+      !formEntities.totp.valid
+    )) {
+      return false;
+    }
+
+    return true;
   }
 
   let content = <div></div>;
@@ -268,7 +319,7 @@ export const CreateThing = () => {
             fullWidth
             label={<Trans>thing.code</Trans>}
             tooltip={<Trans>REGEX.THING_CODE</Trans>}
-            regex={REGEX.THING_DESCRIPTION}
+            regex={REGEX.THING_CODE}
             entity={formEntities.code}
             onChange={(entity:any) => { 
               setFormEntities({
@@ -431,17 +482,22 @@ export const CreateThing = () => {
           alignItems="center"
           display={thingType !== THING_TYPES.CB ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
-            label={<Trans>thing.number</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingNumber}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingNumber(e.target.value);
+          <Input
+            label={<Trans>thing.cb_number</Trans>}
+            tooltip={<Trans>REGEX.THING_CB_NUMBER</Trans>}
+            regex={REGEX.THING_CB_NUMBER}
+            entity={formEntities.cb_number}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                cb_number: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -453,17 +509,23 @@ export const CreateThing = () => {
           alignItems="center"
           display={thingType !== THING_TYPES.CB ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
-            label={<Trans>thing.code</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingCbCode}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingCbCode(e.target.value);
+          <Input
+            label={<Trans>thing.cb_code</Trans>}
+            tooltip={<Trans>REGEX.THING_CB_CODE</Trans>}
+            regex={REGEX.THING_CB_CODE}
+            type="number"
+            entity={formEntities.cb_number}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                cb_code: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -475,17 +537,23 @@ export const CreateThing = () => {
           alignItems="center"
           display={thingType !== THING_TYPES.CB ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
-            label={<Trans>thing.crypto</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingCrypto}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingCrypto(e.target.value);
+          <Input
+            label={<Trans>thing.cb_crypto</Trans>}
+            tooltip={<Trans>REGEX.THING_CB_CRYPTO</Trans>}
+            regex={REGEX.THING_CB_CRYPTO}
+            type="number"
+            entity={formEntities.cb_crypto}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                cb_crypto: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -497,17 +565,22 @@ export const CreateThing = () => {
           alignItems="center"
           display={thingType !== THING_TYPES.CB ? "none" : "flex"}
         >
-          <TextField
-            sx={{ marginRight:1 }}
-            label={<Trans>thing.cbName</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingCbName}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingCbName(e.target.value);
+          <Input
+            label={<Trans>thing.cb_name</Trans>}
+            tooltip={<Trans>REGEX.THING_CB_NAME</Trans>}
+            regex={REGEX.THING_CB_NAME}
+            entity={formEntities.cb_name}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                cb_name: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -519,17 +592,22 @@ export const CreateThing = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <TextField
-            sx={{ marginRight:1 }}
-            label={<Trans>thing.expirationDate</Trans>}
-            variant="standard"
-            size="small"
-            type='text'
-            value={thingExepirationDate}
-            onChange={(e) => { 
-              e.preventDefault();
-              setThingExepirationDate(e.target.value);
+          <Input
+            label={<Trans>thing.cb_expiration_date</Trans>}
+            tooltip={<Trans>REGEX.THING_CB_EXPIRATION_DATE</Trans>}
+            regex={REGEX.THING_CB_EXPIRATION_DATE}
+            entity={formEntities.cb_expiration_date}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                cb_expiration_date: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
+              });
             }}
+            require
+            virgin
           />
         </Grid>
 
@@ -547,12 +625,7 @@ export const CreateThing = () => {
             variant="contained"
             size="small"
             startIcon={<Add />}
-            disabled={
-              !(thingLabel.length > 2
-                && thingDescription.length > 2
-                && thingType !== ''
-              )
-            }
+            disabled={!formIsValid()}
           ><Trans>thing.submit</Trans></Button>
         </Grid>
 

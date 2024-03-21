@@ -11,15 +11,13 @@ import PasswordIcon from '@mui/icons-material/Password';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import HourglassTopIcon from '@mui/icons-material/HourglassTop';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Button, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import { useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
-import { Button, Grid, IconButton, InputAdornment, TextField, Tooltip, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
 import { CODES } from '@src/common/codes';
@@ -43,7 +41,6 @@ export const Chest = () => {
   const context:ContextStoreModel = contextStore();
   const [time, setTime] = React.useState(new Date());
   const [openRowChild, setOpenRowChild] = React.useState(null);
-  const [secretVisible, setSecretVisible] = React.useState(false);
   const [things, setThings] = React.useState<ThingUsecaseModel[]>(null);
   const se = context.chests_secret?.find((elt) => elt.id === searchParams.get('chest_id'))?.secret ?? '';
   const [secretForm, setSecretForm] = React.useState({
