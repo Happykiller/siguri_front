@@ -1,7 +1,9 @@
 import * as React from 'react';
+import { Add } from '@mui/icons-material';
 import { Button, Grid } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 import { REGEX } from '@src/common/REGEX';
 import { CODES } from '@src/common/codes';
@@ -11,6 +13,7 @@ import { Input } from '@presentation/molecule/input';
 import { Footer } from '@presentation/molecule/footer';
 import { FlashStore, flashStore} from '@presentation/molecule/flash';
 import { GetChestUsecaseModel } from '@usecase/getChest/getChest.usecase.model';
+import LeaveChestUsecaseModel from '@usecase/leaveChest/leaveChest.usecase.model';
 import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
 import UpdateChestUsecaseModel from '@usecase/updateChest/updateChest.usecase.model';
 
@@ -36,7 +39,7 @@ export const EditChest = () => {
   });
   const secret = context.chests_secret?.find((elt) => elt.id === searchParams.get('chest_id'))?.secret ?? '';
   const [qry, setQry] = React.useState({
-    loading: true,
+    loading: false,
     data: null,
     error: null
   });
@@ -53,7 +56,7 @@ export const EditChest = () => {
       description: formEntities.description.value
     }).then((response:UpdateChestUsecaseModel) => {
       if(response.message === CODES.SUCCESS) {
-        flash.open(t('edit_chest.editd'));
+        flash.open(t('edit_chest.updated'));
         navigate({
           pathname: '/bank'
         });
@@ -82,11 +85,47 @@ export const EditChest = () => {
     });
   }
 
+  const leave = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    setQry(qry => ({
+      ...qry,
+      loading: true
+    }));
+    inversify.leaveChestUsecase.execute({
+      chest_id: searchParams.get('chest_id')
+    }).then((response:LeaveChestUsecaseModel) => {
+      if(response.message === CODES.SUCCESS) {
+        flash.open(t('edit_chest.leaved'));
+        navigate({
+          pathname: '/bank'
+        });
+      } else {
+        inversify.loggerService.debug(response.error);
+        setQry(qry => ({
+          ...qry,
+          error: response.message
+        }));
+      }
+    })
+    .catch((error:any) => {
+      setQry(qry => ({
+        ...qry,
+        error: error.message
+      }));
+    })
+    .finally(() => {
+      setQry(qry => ({
+        ...qry,
+        loading: false
+      }));
+    });
+  }
+
   let content = <div></div>;
   let errorMessage = <div></div>;
 
   if (qry.error) {
-    errorMessage = <Trans>thing.{qry.error}</Trans>;
+    errorMessage = <Trans>edit_chest.{qry.error}</Trans>;
   }
 
   if (qry.loading) {
@@ -97,7 +136,7 @@ export const EditChest = () => {
       loading: true
     }));
     inversify.getChestUsecase.execute({
-      id: formEntities.id.value,
+      id: searchParams.get('chest_id'),
       secret: secret
     }).then((response:GetChestUsecaseModel) => {
         if(response.message === CODES.SUCCESS) {
@@ -183,6 +222,7 @@ export const EditChest = () => {
           alignItems="center"
         >
           <Input
+            fullWidth
             label={<Trans>thing.description</Trans>}
             tooltip={<Trans>REGEX.THING_DESCRIPTION</Trans>}
             regex={REGEX.THING_DESCRIPTION}
@@ -199,6 +239,43 @@ export const EditChest = () => {
             require
             virgin
           />
+        </Grid>
+
+        {/* Button submit */}
+        <Grid 
+          xs={6}
+          item
+          textAlign='center'
+        >
+          <Button 
+            sx={{
+              m: 1,
+            }}
+            type="submit"
+            variant="contained"
+            size="small"
+            startIcon={<Add />}
+            disabled={!formEntities.label || !formEntities.description}
+          ><Trans>edit_chest.update</Trans></Button>
+        </Grid>
+
+        {/* Button delete */}
+        <Grid 
+          xs={6}
+          item
+          textAlign='center'
+        >
+          <Button 
+            sx={{
+              m: 1,
+              backgroundColor: "#CF6679"
+            }}
+            size="small"
+            variant="contained"
+            startIcon={<DeleteOutlineIcon />}
+            title={t('edit_chest.leave')}
+            onClick={leave}
+          ><Trans>edit_chest.leave</Trans></Button>
         </Grid>
 
       </Grid>

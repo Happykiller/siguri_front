@@ -92,7 +92,11 @@
     "CREATE_CHEST_FAIL": "Echec de la création"
   },
   "edit_chest": {
-    "title": "Editer le coffre"
+    "title": "Editer le coffre",
+    "update": "Mettre à jour",
+    "leave": "Abandonner",
+    "leaved": "Coffre abandonné",
+    "updated": "Mise à jour réussi"
   },
   "error": {
     "credentials_wrong": "Identification impossible"

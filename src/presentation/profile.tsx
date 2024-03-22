@@ -1,16 +1,16 @@
 import * as React from 'react';
+import { Chip, Grid } from '@mui/material';
 import { Button, Divider } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
-import { Chip, Grid, InputAdornment, TextField } from '@mui/material';
 
 import '@presentation/common.scss';
-import Bar from '@presentation/molecule/bar';
 import { CODES } from '@src/common/codes';
-import { Footer } from '@presentation/molecule/footer';
+import { REGEX } from '@src/common/REGEX';
+import Bar from '@presentation/molecule/bar';
 import inversify from '@src/common/inversify';
+import { Input } from '@presentation/molecule/input';
+import { Footer } from '@presentation/molecule/footer';
 import { FlashStore, flashStore} from '@presentation/molecule/flash';
 import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
 import { UpdPasswordUsecaseModel } from '@usecase/updPassword/updPassword.usecase.model';
@@ -19,15 +19,20 @@ export const Profile = () => {
   const { t } = useTranslation();
   const flash:FlashStore = flashStore();
   const context:ContextStoreModel = contextStore();
-  const inital = {
-    oldVisible: false,
-    oldValue: '',
-    newVisible: false,
-    newValue: '',
-    confVisible: false,
-    confValue: ''
-  };
-  const [uptPassword, setUptPassword] = React.useState(inital);
+  const [formEntities, setFormEntities] = React.useState({
+    old: {
+      value: '',
+      valid: false
+    },
+    new: {
+      value: '',
+      valid: false
+    },
+    conf: {
+      value: '',
+      valid: false
+    }
+  });
   const [qry, setQry] = React.useState({
     loading: false,
     data: null,
@@ -42,14 +47,27 @@ export const Profile = () => {
     }));
 
     inversify.updPasswordUsecase.execute({
-      old_value: uptPassword.oldValue,
-      new_value: uptPassword.newValue,
-      conf_value: uptPassword.confValue
+      old_value: formEntities.old.value,
+      new_value: formEntities.new.value,
+      conf_value: formEntities.conf.value
     })
       .then((response:UpdPasswordUsecaseModel) => {
         if(response.message === CODES.SUCCESS) {
           flash.open(t('profile.passwordUpdated'));
-          setUptPassword(inital);
+          setFormEntities({
+            old: {
+              value: '',
+              valid: false
+            },
+            new: {
+              value: '',
+              valid: false
+            },
+            conf: {
+              value: '',
+              valid: false
+            }
+          });
         } else {
           inversify.loggerService.debug(response.error);
           setQry(qry => ({
@@ -70,6 +88,14 @@ export const Profile = () => {
           loading: false
         }));
       });
+  }
+
+  const formIsValid = () => {
+    console.log(!formEntities.new.valid, !formEntities.old.valid, !formEntities.conf.valid, (formEntities.new.value !== formEntities.conf.value))
+    if (!formEntities.new.valid || !formEntities.old.valid || !formEntities.conf.valid || (formEntities.new.value !== formEntities.conf.value)) {
+      return false;
+    }
+    return true;
   }
 
   let content = <div></div>;
@@ -94,39 +120,23 @@ export const Profile = () => {
           alignItems="center"
         >
           {/* Field old password */}
-          <TextField
-            sx={{ marginRight: 1 }}
+          <Input
             label={<Trans>profile.oldPassword</Trans>}
-            variant="standard"
-            size="small"
-            autoComplete='off'
-            type={(uptPassword.oldVisible)?'text':'password'}
-            onChange={(e) => { 
-              e.preventDefault();
-              setUptPassword({
-                ... uptPassword,
-                oldValue: e.target.value
+            tooltip={<Trans>REGEX.PASSWORD</Trans>}
+            regex={REGEX.PASSWORD}
+            type='password'
+            entity={formEntities.old}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                old: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
               });
             }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment 
-                  position="end"
-                  onClick={(e) => { 
-                    e.preventDefault();
-                    setUptPassword({
-                      ... uptPassword,
-                      oldVisible: !uptPassword.oldVisible
-                    });
-                  }}
-                  sx={{
-                    cursor: 'pointer'
-                  }}
-                >
-                  {(uptPassword.oldVisible?<VisibilityOffIcon/>:<VisibilityIcon />)}
-                </InputAdornment>
-              ),
-            }}
+            require
+            virgin
           />
         </Grid>
         <Grid
@@ -137,39 +147,23 @@ export const Profile = () => {
           alignItems="center"
         >
           {/* Field new password */}
-          <TextField
-            sx={{ marginRight: 1 }}
+          <Input
             label={<Trans>profile.newPassword</Trans>}
-            variant="standard"
-            size="small"
-            autoComplete='off'
-            type={(uptPassword.newVisible)?'text':'password'}
-            onChange={(e) => { 
-              e.preventDefault();
-              setUptPassword({
-                ... uptPassword,
-                newValue: e.target.value
+            tooltip={<Trans>REGEX.PASSWORD</Trans>}
+            regex={REGEX.PASSWORD}
+            type='password'
+            entity={formEntities.new}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                new: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
               });
             }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment 
-                  position="end"
-                  onClick={(e) => { 
-                    e.preventDefault();
-                    setUptPassword({
-                      ... uptPassword,
-                      newVisible: !uptPassword.newVisible
-                    });
-                  }}
-                  sx={{
-                    cursor: 'pointer'
-                  }}
-                >
-                  {(uptPassword.newVisible?<VisibilityOffIcon/>:<VisibilityIcon />)}
-                </InputAdornment>
-              ),
-            }}
+            require
+            virgin
           />
         </Grid>
         <Grid
@@ -180,39 +174,23 @@ export const Profile = () => {
           alignItems="center"
         >
           {/* Field confirm password */}
-          <TextField
-            sx={{ marginRight: 1 }}
+          <Input
             label={<Trans>profile.confPassword</Trans>}
-            variant="standard"
-            size="small"
-            autoComplete='off'
-            type={(uptPassword.confVisible)?'text':'password'}
-            onChange={(e) => { 
-              e.preventDefault();
-              setUptPassword({
-                ... uptPassword,
-                confValue: e.target.value
+            tooltip={<Trans>REGEX.PASSWORD</Trans>}
+            regex={REGEX.PASSWORD}
+            type='password'
+            entity={formEntities.conf}
+            onChange={(entity:any) => { 
+              setFormEntities({
+                ... formEntities,
+                conf: {
+                  value: entity.value,
+                  valid: entity.valid
+                }
               });
             }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment 
-                  position="end"
-                  onClick={(e) => { 
-                    e.preventDefault();
-                    setUptPassword({
-                      ... uptPassword,
-                      confVisible: !uptPassword.confVisible
-                    });
-                  }}
-                  sx={{
-                    cursor: 'pointer'
-                  }}
-                >
-                  {(uptPassword.confVisible?<VisibilityOffIcon/>:<VisibilityIcon />)}
-                </InputAdornment>
-              ),
-            }}
+            require
+            virgin
           />
         </Grid>
 
@@ -229,7 +207,7 @@ export const Profile = () => {
             variant="contained"
             size="small"
             startIcon={<SystemUpdateAltIcon />}
-            disabled={!(uptPassword.newValue.length > 3 && uptPassword.newValue === uptPassword.confValue)}
+            disabled={!formIsValid()}
             onClick={(e) => { 
               e.preventDefault();
               update();

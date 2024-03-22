@@ -20,6 +20,7 @@ import { Button, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import { useSearchParams, useNavigate, createSearchParams } from 'react-router-dom';
 
 import '@presentation/common.scss';
+import { REGEX } from '@src/common/REGEX';
 import { CODES } from '@src/common/codes';
 import Bar from '@presentation/molecule/bar';
 import inversify from '@src/common/inversify';
@@ -31,7 +32,6 @@ import { FlashStore, flashStore} from '@presentation/molecule/flash';
 import GetThingsUsecaseModel from '@usecase/getThings/getThings.usecase.model';
 import LeaveChestUsecaseModel from '@usecase/leaveChest/leaveChest.usecase.model';
 import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
-import { REGEX } from '../common/REGEX';
 
 export const Chest = () => {
   const { t } = useTranslation();
@@ -534,8 +534,11 @@ export const Chest = () => {
       <Grid
         container
         sx={{
-          backgroundColor: '#1A2027',
-          marginBottom:'1px'
+          backgroundColor: '#3C4042',
+          marginBottom:'1px',
+          "&:hover": {
+            backgroundColor: "#606368"
+          }
         }}
       >
         <Grid 
@@ -806,7 +809,7 @@ export const Chest = () => {
           sx={{
             color: "#000000",
             fontWeight: "bold",
-            backgroundColor: "#BB86FC",
+            backgroundColor: "#EA80FC",
             borderRadius: "5px 5px 0px 0px",
             fontSize: "0.875rem"
           }}

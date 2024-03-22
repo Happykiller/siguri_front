@@ -178,7 +178,7 @@ export const Bank = () => {
       sx={{
         color: "#000000",
         fontWeight: "bold",
-        backgroundColor: "#BB86FC",
+        backgroundColor: "#EA80FC",
         borderRadius: "5px 5px 0px 0px",
         fontSize: "0.875rem"
       }}
@@ -229,8 +229,11 @@ export const Bank = () => {
         key={chest.id}
         container
         sx={{
-          backgroundColor: '#1A2027',
+          backgroundColor: '#3C4042',
           marginBottom:'1px',
+          "&:hover": {
+            backgroundColor: "#606368"
+          }
         }}
       >
         <Grid 
