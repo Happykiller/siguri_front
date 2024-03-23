@@ -137,7 +137,12 @@ export const Bank = () => {
     ><Trans>bank.createChest</Trans></Button>
     <Paper
       component="form"
-      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 200 }}
+      sx={{ 
+        p: '2px 4px', 
+        display: 'flex', 
+        alignItems: 'center',
+        width: 200 
+      }}
     >
       <Input
         label={<Trans>bank.join</Trans>}
@@ -204,7 +209,7 @@ export const Bank = () => {
       </Grid>
       <Grid
         item
-        xs={5}
+        xs={4}
         md={4}
         display="flex"
         justifyContent="center"
@@ -214,7 +219,7 @@ export const Bank = () => {
       </Grid>
       <Grid
         item
-        xs={3}
+        xs={4}
         md={3}
         sx={{
           width: '130px'
@@ -259,7 +264,7 @@ export const Bank = () => {
         </Grid>
         <Grid 
           item
-          xs={5}
+          xs={4}
           md={4}
           display="flex"
           justifyContent="center"
@@ -269,7 +274,7 @@ export const Bank = () => {
           <Typography noWrap>{chest.description}</Typography>
         </Grid>
         <Grid
-          xs={3}
+          xs={4}
           md={3}
           sx={{
             width: '130px'

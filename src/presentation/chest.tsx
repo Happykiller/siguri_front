@@ -534,7 +534,7 @@ export const Chest = () => {
       <Grid
         container
         sx={{
-          backgroundColor: '#3C4042',
+          backgroundColor: (openRowChild?.thing_id === thing.id)  ? "#606368" : "#3C4042",
           marginBottom:'1px',
           "&:hover": {
             backgroundColor: "#606368"
