@@ -1,6 +1,6 @@
 {
   "bank": {
-    "title": "La bank",
+    "title": "Banque",
     "label": "Label",
     "author": "Auteur",
     "description": "Description",
@@ -12,7 +12,7 @@
     "JOIN_CHEST_FAIL": "Impossible de rejoindre"
   },
   "bar": {
-    "bank": "La Bank",
+    "bank": "Banque",
     "password": "Mot de passe",
     "logout": "Quitter",
     "settings": "Réglages",
@@ -125,16 +125,19 @@
     "specials": "Caractères spéciaux"
   },
   "profile": {
-    "title": "Profil",
+    "addPasskey": "Ajouter une clé",
     "code": "Identifiant: ",
+    "confPassword": "Confirmer mot de passe",
+    "keys": "Voir les clés",
     "name_first": "Prénom: ",
     "name_last": "Nom: ",
-    "password": "Changer mot de passe",
-    "oldPassword": "Mot de passe actuel",
     "newPassword": "Nouveau mot de passe",
-    "confPassword": "Confirmer mot de passe",
-    "UPDATE_PASSWORD_FAIL": "Echec du changement de mot de passe",
-    "passwordUpdated": "Mise à jour du mot de passe réussi"
+    "oldPassword": "Mot de passe actuel",
+    "passkeys": "Clés d'accés",
+    "password": "Changer mot de passe",
+    "passwordUpdated": "Mise à jour du mot de passe réussi",
+    "title": "Profil",
+    "UPDATE_PASSWORD_FAIL": "Echec du changement de mot de passe"
   },
   "thing": {
     "submit": "Créer",
