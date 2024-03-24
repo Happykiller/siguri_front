@@ -5,13 +5,13 @@ import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import '@presentation/login.scss';
+import { REGEX } from '@src/common/REGEX';
 import { CODES } from '@src/common/codes';
 import inversify from '@src/common/inversify';
 import { Input } from '@presentation/molecule/input';
 import { Footer } from '@presentation/molecule/footer';
 import { contextStore } from '@presentation/store/contextStore';
 import { AuthUsecaseModel } from '@usecase/auth/model/auth.usecase.model';
-import { REGEX } from '../common/REGEX';
 
 export const Login = () => {
   const navigate = useNavigate();
