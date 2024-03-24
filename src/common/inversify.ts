@@ -17,9 +17,10 @@ import { CreateChestUsecase } from '@usecase/createChest/createChest.usecase';
 import { CreateThingUsecase } from '@usecase/createThing/createThing.usecase';
 import { UpdateThingUsecase } from '@usecase/updateThing/updateThing.usecase';
 import { DeleteThingUsecase } from '@usecase/deleteThing/deleteThing.usecase';
+import { UpdateChestUsecase } from '@usecase/updateChest/updateThing.usecase';
+import { UpdPasswordUsecase } from '@usecase/updPassword/updPassword.usecase';
+import { CreatePasskeyUsecase } from '@usecase/createPasskey/createPasskey.usecase';
 import { GeneratePasswordUsecase } from '@usecase/generatePassword/generatePassword.usecase';
-import { UpdPasswordUsecase } from '@src/usecase/updPassword/updPassword.usecase';
-import { UpdateChestUsecase } from '../usecase/updateChest/updateThing.usecase';
 
 export class Inversify {
   authUsecase: AuthUsecase;
@@ -39,6 +40,7 @@ export class Inversify {
   updateThingUsecase: UpdateThingUsecase;
   updPasswordUsecase: UpdPasswordUsecase;
   updateChestUsecase: UpdateChestUsecase;
+  createPasskeyUsecase: CreatePasskeyUsecase;
   generatePasswordUsecase: GeneratePasswordUsecase;
 
   constructor() {
@@ -57,8 +59,9 @@ export class Inversify {
     this.updateThingUsecase = new UpdateThingUsecase(this);
     this.createChestUsecase = new CreateChestUsecase(this);
     this.deleteThingUsecase = new DeleteThingUsecase(this);
-    this.updPasswordUsecase = new  UpdPasswordUsecase(this);
-    this.updateChestUsecase = new  UpdateChestUsecase(this);
+    this.updPasswordUsecase = new UpdPasswordUsecase(this);
+    this.updateChestUsecase = new UpdateChestUsecase(this);
+    this.createPasskeyUsecase = new CreatePasskeyUsecase(this);
     this.generatePasswordUsecase = new GeneratePasswordUsecase(this);
 
     // Services

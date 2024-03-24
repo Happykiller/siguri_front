@@ -274,13 +274,15 @@ export const Profile = () => {
               challenge
             );
 
-            console.log("✅ Save the user account data.", {
-              userId: context.id,
-              username: context.code,
-              displayName: `${context.name_first} ${context.name_last}`,
-              challengeBuffer: challengeBufferString,
+            const data = {
+              user_id: context.id,
+              user_code: context.code,
+              display_name: `${context.name_first} ${context.name_last}`,
+              challenge_buffer: challengeBufferString,
               challenge: challenge,
-            })
+            };
+            await inversify.createPasskeyUsecase.execute(data);
+            console.log("✅ Save the user account data.", data)
           }
         } else {
           console.log("❌ Credential does not exist.");
