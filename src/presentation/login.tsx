@@ -13,9 +13,11 @@ import { Input } from '@presentation/molecule/input';
 import { Footer } from '@presentation/molecule/footer';
 import { contextStore } from '@presentation/store/contextStore';
 import { AuthUsecaseModel } from '@usecase/auth/model/auth.usecase.model';
+import { PasskeyStoreModel, passkeyStore } from '@presentation/store/passkeyStore';
 
 export const Login = () => {
   const navigate = useNavigate();
+  const passkey:PasskeyStoreModel = passkeyStore();
   const [qry, setQry] = React.useState({
     loading: null,
     data: null,
@@ -78,7 +80,7 @@ export const Login = () => {
     const challengeBuffer = Uint8Array.from(challenge, (c) => c.charCodeAt(0));
     const publicKeyCredentialRequestOptions: PublicKeyCredentialRequestOptions = {
       challenge: challengeBuffer,
-      rpId: 'localhost',
+      rpId: location.hostname,
       userVerification: "preferred",
       timeout: 60000,
     };
@@ -169,6 +171,33 @@ export const Login = () => {
     return storedChallenge === clientChallenge;
   };
 
+  const extractData = (credential: Credential) => {
+    console.log("⚈ ⚈ ⚈ Get User Id ⚈ ⚈ ⚈");
+    const utf8Decoder = new TextDecoder("utf-8");
+  
+    const user_id = utf8Decoder.decode(
+      // @ts-ignore
+      credential.response.userHandle
+    );
+    console.log("✅ user_id : ", user_id);
+
+    console.log("⚈ ⚈ ⚈ Get challenge ⚈ ⚈ ⚈");
+    let challenge;
+    // @ts-ignore
+    let clientData = parseClientData(credential.response.clientDataJSON);
+    if (clientData !== null) {
+      console.log("✅ We have performed the login.");
+      console.log("✅ clientData : ", clientData);
+      console.log("⚈ ⚈ ⚈ Verifying Challenge ⚈ ⚈ ⚈");
+      challenge = clientData.challenge;
+    }
+
+    return {
+      user_id: user_id,
+      challenge: challenge
+    }
+  }
+
   const signIn = async () => {
 
     //Todo
@@ -211,37 +240,34 @@ export const Login = () => {
       "challenge": "YU5ObWs4Y0FmZFY0b3JHWg"
     };
     console.log("⚈ ⚈ ⚈ getUserAccount ⚈ ⚈ ⚈");
-    if (userAccount !== null) {
+    if (passkey.challenge_buffer !== null) {
       console.log(
         "Get User Account ✅ There is a match for that username : ",
-        userAccount
+        passkey
       );
       // Login with the details.
       // This part remains on the front-end in production.
-      const credential = await performLogin(userAccount.challengeBuffer);
+      const credential = await performLogin(passkey.challenge_buffer);
 
       if (credential !== null) {
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // MARK: THIS SHOULD BE DONE ON THE BACKEND
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        /*
-          This functionality confirms that theres a credentials are valid
-          and that they match the details related to the users account.
-        */
-        switch (verifyUserId(credential, userAccount.userId)) {
-          case true:
-            switch (verifyClientData(credential, userAccount)) {
-              case true:
-                console.log("✅ You have succesfully logged in.");
-                break;
-              case false:
-                console.log("❌ The challenge does not match.");
-                break;
-            }
-            break;
-          case false:
-            break;
-        }
+        const datas = extractData(credential);
+        console.log("✅ You have succesfully get datas", datas);
+
+        const session = await inversify.authPasskeyUsecase.execute({
+          user_code: passkey.user_code,
+          user_id: datas.user_id,
+          challenge: datas.challenge,
+          challenge_buffer: passkey.challenge_buffer
+        });
+
+        contextStore.setState({ 
+          id: session.data.id,
+          code: session.data.code,
+          access_token: session.data.access_token,
+          name_first: session.data.name_first,
+          name_last: session.data.name_last
+        });
+        navigate('/');
       } else {
         console.log(
           " signIn ❌ Failed to perform Login as credential does not exist."
@@ -320,6 +346,7 @@ export const Login = () => {
         variant="contained"
         size="small"
         startIcon={<KeyIcon />}
+        disabled={!passkey.user_code}
         onClick={(e) => { 
           e.preventDefault();
           signIn();

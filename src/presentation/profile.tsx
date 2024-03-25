@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { Chip, Grid, Link } from '@mui/material';
+import Add from '@mui/icons-material/Add';
 import { Button, Divider } from '@mui/material';
+import { Chip, Grid, Link } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
 
@@ -11,12 +12,12 @@ import Bar from '@presentation/molecule/bar';
 import inversify from '@src/common/inversify';
 import { Input } from '@presentation/molecule/input';
 import { Footer } from '@presentation/molecule/footer';
+import PassKeyClientData from '@src/common/passKeyClientData';
+import { passkeyStore } from '@presentation/store/passkeyStore';
 import { FlashStore, flashStore} from '@presentation/molecule/flash';
+import PassKeyClientDataValidation from '@src/common/passKeyClientDataValidation';
 import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
 import { UpdPasswordUsecaseModel } from '@usecase/updPassword/updPassword.usecase.model';
-import Add from '@mui/icons-material/Add';
-import PassKeyClientDataValidation from '../common/passKeyClientDataValidation';
-import PassKeyClientData from '../common/passKeyClientData';
 
 export const Profile = () => {
   const { t } = useTranslation();
@@ -124,7 +125,7 @@ export const Profile = () => {
         challenge: challengeBuffer,
         rp: {
           name: 'siguri',
-          id: 'localhost',
+          id: location.hostname,
         },
         user: {
           id: userIdBuffer,
@@ -222,8 +223,9 @@ export const Profile = () => {
     // @ts-ignore
     // Gather the Client Data
     const clientData = parseClientData(credential.response.clientDataJSON);
+    const currentOrigin = window.location.href;
     console.log("✅  Gathered Client Data: ", clientData);
-    if (clientData.origin !== 'http://localhost:8080') {
+    if (!currentOrigin.includes(clientData.origin)) {
       console.log("❌  Origin does not match!");
       return {
         valid: false,
@@ -282,6 +284,10 @@ export const Profile = () => {
               challenge: challenge,
             };
             await inversify.createPasskeyUsecase.execute(data);
+            passkeyStore.setState({ 
+              user_code: data.user_code,
+              challenge_buffer: data.challenge_buffer
+            });
             console.log("✅ Save the user account data.", data)
           }
         } else {
@@ -482,6 +488,14 @@ export const Profile = () => {
                   addPasskey();
                 }}
               ><Trans>profile.addPasskey</Trans></Button>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
               <Link href="ms-settings:savedpasskeys"><Trans>profile.keys</Trans></Link>
             </Grid>
             <Grid
