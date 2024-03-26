@@ -1,30 +1,26 @@
 import { CODES } from '@src/common/codes';
 import { Inversify } from '@src/common/inversify';
-import DeleteThingUsecaseDto from '@usecase/deleteThing/deleteThing.usecase.dto';
-import DeleteThingUsecaseModel from '@usecase/deleteThing/deleteThing.usecase.model';
+import DeletePasskeyUsecaseDto from '@usecase/deletePasskey/deletePasskey.usecase.dto';
+import DeletePasskeyUsecaseModel from '@usecase/deletePasskey/deletePasskey.usecase.model';
 
-export class DeleteThingUsecase {
+export class DeletePasskeyUsecase {
 
   constructor(
     private inversify:Inversify
   ){}
 
-  async execute(dto: DeleteThingUsecaseDto): Promise<DeleteThingUsecaseModel>  {
+  async execute(dto: DeletePasskeyUsecaseDto): Promise<DeletePasskeyUsecaseModel>  {
     try {
       const response:any = await this.inversify.graphqlService.send(
         {
-          operationName: 'delete_thing',
+          operationName: 'delete_passkey',
           variables: dto,
-          query: `mutation delete_thing($thing_id: String!, $chest_secret: String!) {
-            delete_thing (
+          query: `mutation delete_passkey($passkey_id: String!) {
+            delete_passkey (
               dto: {
-                thing_id: $thing_id
-                chest_secret: $chest_secret
+                passkey_id: $passkey_id
               }
-            ) 
-            {
-              id
-            }
+            )
           }`
         }
       );
@@ -45,7 +41,7 @@ export class DeleteThingUsecase {
         }
       } else {
         return {
-          message: CODES.DELETE_THING_FAIL,
+          message: CODES.DELETE_PASSKEY_FAIL,
           error: e.message
         }
       }

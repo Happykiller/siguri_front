@@ -16,17 +16,26 @@ export class CreatePasskeyUsecase {
           operationName: 'create_passkey',
           variables: dto,
           query: `mutation create_passkey(
-            $display_name: String!, 
-            $challenge_buffer: String!, 
+            $label: String!
+            $display_name: String!
+            $challenge_buffer: String!
             $challenge: String!
           ) {
             create_passkey (
               dto: {
+                label: $label
                 display_name: $display_name
                 challenge_buffer: $challenge_buffer
                 challenge: $challenge
               }
-            )
+            ) {
+              id
+              label
+              user_id
+              user_code
+              display_name
+              challenge_buffer
+            }
           }`
         }
       );
@@ -37,7 +46,7 @@ export class CreatePasskeyUsecase {
 
       return {
         message: CODES.SUCCESS,
-        data: true
+        data: response.data.create_passkey
       }
     } catch (e: any) {
       return {

@@ -129,12 +129,20 @@
     "addPasskey": "Ajouter une clé",
     "code": "Identifiant: ",
     "confPassword": "Confirmer mot de passe",
-    "keys": "Voir les clés",
+    "keys": "Voir les clés du système",
     "name_first": "Prénom: ",
     "name_last": "Nom: ",
     "newPassword": "Nouveau mot de passe",
     "oldPassword": "Mot de passe actuel",
+    "passkey": {
+      "table": {
+        "label": "Nom",
+        "delete": "Supprimer",
+        "active": "Activer"
+      }
+    },
     "passkeys": "Clés d'accés",
+    "passkey_label": "Nom de l'appareil",
     "password": "Changer mot de passe",
     "passwordUpdated": "Mise à jour du mot de passe réussi",
     "title": "Profil",
@@ -192,6 +200,7 @@
     "THING_CB_CODE": "4 chiffres",
     "THING_CB_CRYPTO": "3 chiffres",
     "THING_CB_NAME": "De 3 à 50 lettres avec possiblement des espaces",
-    "THING_CB_EXPIRATION_DATE": "Des chiffres avec un espace ou - ou -, exemple 02/24"
+    "THING_CB_EXPIRATION_DATE": "Des chiffres avec un espace ou - ou -, exemple 02/24",
+    "PASSKEY_LABEL": "De 3 à 50, juste des lettres"
   }
 }

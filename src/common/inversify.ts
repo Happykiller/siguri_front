@@ -19,9 +19,11 @@ import { UpdateThingUsecase } from '@usecase/updateThing/updateThing.usecase';
 import { DeleteThingUsecase } from '@usecase/deleteThing/deleteThing.usecase';
 import { UpdateChestUsecase } from '@usecase/updateChest/updateThing.usecase';
 import { UpdPasswordUsecase } from '@usecase/updPassword/updPassword.usecase';
+import { AuthPasskeyUsecase } from '@usecase/authPasskey/authPasskey.usecase';
+import { DeletePasskeyUsecase } from '@usecase/deletePasskey/deletePasskey.usecase';
 import { CreatePasskeyUsecase } from '@usecase/createPasskey/createPasskey.usecase';
 import { GeneratePasswordUsecase } from '@usecase/generatePassword/generatePassword.usecase';
-import { AuthPasskeyUsecase } from '../usecase/authPasskey/authPasskey.usecase';
+import { GetPasskeyForUserUsecase } from '@usecase/getPasskeyForUser/getPasskeyForUser.usecase';
 
 export class Inversify {
   authUsecase: AuthUsecase;
@@ -42,8 +44,10 @@ export class Inversify {
   updPasswordUsecase: UpdPasswordUsecase;
   updateChestUsecase: UpdateChestUsecase;
   authPasskeyUsecase: AuthPasskeyUsecase;
+  deletePasskeyUsecase: DeletePasskeyUsecase;
   createPasskeyUsecase: CreatePasskeyUsecase;
   generatePasswordUsecase: GeneratePasswordUsecase;
+  getPasskeyForUserUsecase: GetPasskeyForUserUsecase;
 
   constructor() {
     // Usecases
@@ -64,8 +68,10 @@ export class Inversify {
     this.updPasswordUsecase = new UpdPasswordUsecase(this);
     this.updateChestUsecase = new UpdateChestUsecase(this);
     this.authPasskeyUsecase = new AuthPasskeyUsecase(this);
+    this.deletePasskeyUsecase = new DeletePasskeyUsecase(this);
     this.createPasskeyUsecase = new CreatePasskeyUsecase(this);
     this.generatePasswordUsecase = new GeneratePasswordUsecase(this);
+    this.getPasskeyForUserUsecase = new GetPasskeyForUserUsecase(this);
 
     // Services
     if (config.mode === 'prod') {

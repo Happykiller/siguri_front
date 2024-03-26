@@ -1,9 +1,11 @@
 import * as React from 'react';
 import Add from '@mui/icons-material/Add';
-import { Button, Divider } from '@mui/material';
 import { Chip, Grid, Link } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Trans, useTranslation } from 'react-i18next';
 import SystemUpdateAltIcon from '@mui/icons-material/SystemUpdateAlt';
+import { Button, Divider, IconButton, Paper, Typography } from '@mui/material';
 
 import '@presentation/common.scss';
 import { CODES } from '@src/common/codes';
@@ -13,16 +15,24 @@ import inversify from '@src/common/inversify';
 import { Input } from '@presentation/molecule/input';
 import { Footer } from '@presentation/molecule/footer';
 import PassKeyClientData from '@src/common/passKeyClientData';
-import { passkeyStore } from '@presentation/store/passkeyStore';
+import { PasskeyStoreModel, passkeyStore } from '@presentation/store/passkeyStore';
 import { FlashStore, flashStore} from '@presentation/molecule/flash';
 import PassKeyClientDataValidation from '@src/common/passKeyClientDataValidation';
 import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
 import { UpdPasswordUsecaseModel } from '@usecase/updPassword/updPassword.usecase.model';
+import { GetPasskeyForUserUsecase } from '../usecase/getPasskeyForUser/getPasskeyForUser.usecase';
+import { GetPasskeyForUserUsecaseModel } from '../usecase/getPasskeyForUser/getPasskeyForUser.usecase.model';
+import { PasskeyUsecaseModel } from '../usecase/model/passkey.usecase.model';
 
 export const Profile = () => {
   const { t } = useTranslation();
+  const passkeyStored:PasskeyStoreModel = passkeyStore();
   const flash:FlashStore = flashStore();
   const context:ContextStoreModel = contextStore();
+  const [passkey_label, setPasskey_label] = React.useState({
+    value: '',
+    valid: false
+  })
   const [formEntities, setFormEntities] = React.useState({
     old: {
       value: '',
@@ -42,6 +52,12 @@ export const Profile = () => {
     data: null,
     error: null
   });
+  const [qryPasskeys, setQryPasskeys] = React.useState({
+    loading: false,
+    data: null,
+    error: null
+  });
+  const [passkeys, setPasskeys] = React.useState(null)
 
   const update = () => {
     setQry(qry => ({
@@ -277,18 +293,21 @@ export const Profile = () => {
             );
 
             const data = {
+              label: passkey_label.value,
               user_id: context.id,
               user_code: context.code,
               display_name: `${context.name_first} ${context.name_last}`,
               challenge_buffer: challengeBufferString,
               challenge: challenge,
             };
-            await inversify.createPasskeyUsecase.execute(data);
+            const response = await inversify.createPasskeyUsecase.execute(data);
             passkeyStore.setState({ 
+              passkey_id: response.data.id,
               user_code: data.user_code,
               challenge_buffer: data.challenge_buffer
             });
-            console.log("✅ Save the user account data.", data)
+            console.log("✅ Saved data.", response)
+            setPasskeys(null);
           }
         } else {
           console.log("❌ Credential does not exist.");
@@ -298,6 +317,155 @@ export const Profile = () => {
       // Session Timed Out
       console.log("ERROR : ", error);
     }
+  }
+
+  const deletePasskey = async (dto: any) => {
+    await inversify.deletePasskeyUsecase.execute(dto);
+    setPasskeys(null);
+  }
+
+  const activePasskey = async (dto: any) => {
+    passkeyStore.setState({ 
+      passkey_id: dto.passkey_id,
+      user_code: dto.user_code,
+      challenge_buffer: dto.challenge_buffer
+    });
+    setPasskeys(null);
+  }
+
+  const defaultContentPasskeys = <Grid
+    container
+    display={passkeys?.length > 0?'flex':'none'}
+  >
+    <Grid
+      container
+      sx={{
+        color: "#000000",
+        fontWeight: "bold",
+        backgroundColor: "#EA80FC",
+        borderRadius: "5px 5px 0px 0px",
+        fontSize: "0.875rem"
+      }}
+    >
+      <Grid 
+        xs={6}
+        item
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Trans>profile.passkey.table.label</Trans>
+      </Grid>
+      <Grid
+        item
+        xs={6}
+      >
+      </Grid>
+    </Grid>
+    
+    {passkeys?.map((passkey:PasskeyUsecaseModel) => {
+      return (
+      <Grid
+        key={passkey.id}
+        container
+        sx={{
+          backgroundColor: '#3C4042',
+          marginBottom:'1px',
+          "&:hover": {
+            backgroundColor: "#606368"
+          }
+        }}
+      >
+        <Grid 
+          xs={6}
+          item
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          title={passkey.label}
+        >
+          <Typography noWrap>{passkey.label}</Typography>
+        </Grid>
+        <Grid
+          xs={6}
+          item
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          {/* Delete  */}
+          <IconButton 
+            title={t('profile.passkey.table.delete')}
+            onClick={(e) => {
+              e.preventDefault();
+              deletePasskey({
+                passkey_id: passkey.id
+              });
+            }}>
+            <DeleteIcon />
+          </IconButton>
+
+          {/* Active  */}
+          <IconButton 
+            title={t('profile.passkey.table.active')}
+            disabled={(passkey?.id === passkeyStored.passkey_id)}
+            onClick={(e) => {
+              e.preventDefault();
+              activePasskey({
+                passkey_id: passkey.id,
+                user_code: passkey.user_code,
+                challengeBuffer: passkey.challenge_buffer
+              });
+            }}>
+            <CheckIcon 
+              sx={{
+                color: passkey?.id === passkeyStored.passkey_id?'green':'grey'
+              }}
+            />
+          </IconButton>
+        </Grid>
+      </Grid>
+    )})}
+
+  </Grid>;
+
+  let contentPasskeys = <div></div>;
+  if(qryPasskeys.loading) {
+    contentPasskeys = <div><Trans>common.loading</Trans></div>;
+  } else if(qry.error) {
+    contentPasskeys = <div><Trans>profiles.{qry.error}</Trans></div>;
+  } else if(passkeys === null) {
+    setPasskeys([]);
+    setQryPasskeys(qry => ({
+      ...qry,
+      loading: true
+    }));
+    inversify.getPasskeyForUserUsecase.execute()
+      .then((response:GetPasskeyForUserUsecaseModel) => {
+        if(response.message === CODES.SUCCESS) {
+          setPasskeys(response.data);
+        } else {
+          inversify.loggerService.debug(response.error);
+          setQryPasskeys(qry => ({
+            ...qry,
+            error: response.message
+          }));
+        }
+      })
+      .catch((error:any) => {
+        setQryPasskeys(qry => ({
+          ...qry,
+          error: error.message
+        }));
+      })
+      .finally(() => {
+        setQryPasskeys(qry => ({
+          ...qry,
+          loading: false
+        }));
+      });
+  } else {
+    contentPasskeys = defaultContentPasskeys;
   }
 
   let content = <div></div>;
@@ -479,15 +647,42 @@ export const Profile = () => {
               alignItems="center"
             >
               {/* Add passkey */}
-              <Button 
-                variant="contained"
-                size="small"
-                startIcon={<Add />}
-                onClick={(e) => { 
-                  e.preventDefault();
-                  addPasskey();
+              <Paper
+                component="form"
+                sx={{ 
+                  p: '2px 4px', 
+                  display: 'flex', 
+                  alignItems: 'center'
                 }}
-              ><Trans>profile.addPasskey</Trans></Button>
+              >
+                <Input
+                  label={<Trans>profile.passkey_label</Trans>}
+                  tooltip={<Trans>REGEX.PASSKEY_LABEL</Trans>}
+                  regex={REGEX.PASSKEY_LABEL}
+                  entity={passkey_label}
+                  onChange={(entity:any) => { 
+                    setPasskey_label({
+                      value: entity.value,
+                      valid: entity.valid
+                    });
+                  }}
+                  require
+                  virgin
+                />
+                <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+                <IconButton 
+                  color="primary" 
+                  sx={{ p: '10px' }} 
+                  title={t('bank.joinTitle')}
+                  disabled={!passkey_label.valid}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    addPasskey()
+                  }}
+                >
+                  <Add />
+                </IconButton>
+              </Paper>
             </Grid>
             <Grid
               item
@@ -507,6 +702,9 @@ export const Profile = () => {
             >
               {errorMessage}
             </Grid>
+          </div>
+          <div>
+            {contentPasskeys}
           </div>
         </div>
       </div>

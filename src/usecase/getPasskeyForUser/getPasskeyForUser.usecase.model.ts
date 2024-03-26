@@ -1,7 +1,7 @@
 import { PasskeyUsecaseModel } from '@usecase/model/passkey.usecase.model';
 
-export interface CreatePasskeyUsecaseModel {
+export interface GetPasskeyForUserUsecaseModel {
   message: string;
-  data?: PasskeyUsecaseModel,
+  data?: PasskeyUsecaseModel[],
   error?: string;
 }
