@@ -1,7 +1,7 @@
 import { CODES } from '@src/common/codes';
 import { Inversify } from '@src/common/inversify';
-import { AuthPasskeyUsecaseDto } from './authPasskey.usecase.dto';
-import { AuthPasskeyUsecaseModel } from './authPasskey.usecase.model';
+import { AuthPasskeyUsecaseDto } from '@usecase/authPasskey/authPasskey.usecase.dto';
+import { AuthPasskeyUsecaseModel } from '@usecase/authPasskey/authPasskey.usecase.model';
 
 export class AuthPasskeyUsecase {
 

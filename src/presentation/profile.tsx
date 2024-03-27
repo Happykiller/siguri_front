@@ -15,20 +15,19 @@ import inversify from '@src/common/inversify';
 import { Input } from '@presentation/molecule/input';
 import { Footer } from '@presentation/molecule/footer';
 import PassKeyClientData from '@src/common/passKeyClientData';
-import { PasskeyStoreModel, passkeyStore } from '@presentation/store/passkeyStore';
 import { FlashStore, flashStore} from '@presentation/molecule/flash';
+import { PasskeyUsecaseModel } from '@usecase/model/passkey.usecase.model';
 import PassKeyClientDataValidation from '@src/common/passKeyClientDataValidation';
+import { PasskeyStoreModel, passkeyStore } from '@presentation/store/passkeyStore';
 import { ContextStoreModel, contextStore } from '@presentation/store/contextStore';
 import { UpdPasswordUsecaseModel } from '@usecase/updPassword/updPassword.usecase.model';
-import { GetPasskeyForUserUsecase } from '../usecase/getPasskeyForUser/getPasskeyForUser.usecase';
-import { GetPasskeyForUserUsecaseModel } from '../usecase/getPasskeyForUser/getPasskeyForUser.usecase.model';
-import { PasskeyUsecaseModel } from '../usecase/model/passkey.usecase.model';
+import { GetPasskeyForUserUsecaseModel } from '@usecase/getPasskeyForUser/getPasskeyForUser.usecase.model';
 
 export const Profile = () => {
   const { t } = useTranslation();
-  const passkeyStored:PasskeyStoreModel = passkeyStore();
   const flash:FlashStore = flashStore();
   const context:ContextStoreModel = contextStore();
+  const passkeyStored:PasskeyStoreModel = passkeyStore();
   const [passkey_label, setPasskey_label] = React.useState({
     value: '',
     valid: false
@@ -213,7 +212,7 @@ export const Profile = () => {
     ) as string;
   };
 
-  const validatePassKeyCreation = (credential: Credential): string | null => {
+  const getChallenge = (credential: Credential): string | null => {
     const clientDataValidation = validateClientData(credential);
     switch (clientDataValidation.valid) {
       case true:
@@ -223,14 +222,14 @@ export const Profile = () => {
     }
   };
 
-  const parseClientData = (clientData: ArrayBuffer) => {
+  const parseClientData = (clientData: ArrayBuffer): PassKeyClientData => {
     // decode the clientDataJSON into a utf-8 string
     const utf8Decoder = new TextDecoder("utf-8");
     const decodedClientData = utf8Decoder.decode(clientData);
   
     // parse the string as an object
     const clientDataObj = JSON.parse(decodedClientData);
-    return clientDataObj as PassKeyClientData;
+    return clientDataObj;
   };
   
   const validateClientData = (
@@ -263,59 +262,38 @@ export const Profile = () => {
 
   const addPasskey = async () => {
     const challengeBufferString = generateRandomString(16);
-    console.log("✅ Created challengeBufferString : ", challengeBufferString);
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    /* MARK: THIS SHOULD BE DONE IF AN ACCOUNT IS VALID 
-             AND THE CHALLENGE BUFFER AND USERID SHOULD BE PASSED
-             FROM THE RETURN CALL IN THE SERVER
-    */
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
     try {
       const credential = await createPassKeyCredential(context.code, `${context.name_first} ${context.name_last}`, challengeBufferString, context.id);
 
       if (credential) {
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        // MARK: THIS SHOULD BE DONE ON THE BACKEND
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        console.log("✅ Credential is not null : ", credential);
-
         // Validate PassKey Creation
-        const challenge = validatePassKeyCreation(credential);
-        switch (challenge) {
-          case null:
-            console.log("❌ PassKey verification failed.");
-            return;
-          default:
-            console.log(
-              "✅ PassKey verification passed with challenge : ",
-              challenge
-            );
+        const challenge = getChallenge(credential);
 
-            const data = {
-              label: passkey_label.value,
-              user_id: context.id,
-              user_code: context.code,
-              display_name: `${context.name_first} ${context.name_last}`,
-              challenge_buffer: challengeBufferString,
-              challenge: challenge,
-            };
-            const response = await inversify.createPasskeyUsecase.execute(data);
-            passkeyStore.setState({ 
-              passkey_id: response.data.id,
-              user_code: data.user_code,
-              challenge_buffer: data.challenge_buffer
-            });
-            console.log("✅ Saved data.", response)
-            setPasskeys(null);
-          }
+        if (!challenge) {
+          inversify.loggerService.error("Get challenge failed.");
         } else {
-          console.log("❌ Credential does not exist.");
+          const data = {
+            label: passkey_label.value,
+            user_id: context.id,
+            user_code: context.code,
+            display_name: `${context.name_first} ${context.name_last}`,
+            challenge_buffer: challengeBufferString,
+            challenge: challenge,
+          };
+          inversify.loggerService.debug("Datas to record", data);
+          const response = await inversify.createPasskeyUsecase.execute(data);
+          passkeyStore.setState({ 
+            passkey_id: response.data.id,
+            user_code: data.user_code,
+            challenge_buffer: data.challenge_buffer
+          });
+          setPasskeys(null);
         }
+      } else {
+        inversify.loggerService.error("Get credential failed.");
+      }
     } catch (error) {
-      console.log("❌ Error creating credential");
-      // Session Timed Out
-      console.log("ERROR : ", error);
+      inversify.loggerService.error("Error creating credential", error);
     }
   }
 
