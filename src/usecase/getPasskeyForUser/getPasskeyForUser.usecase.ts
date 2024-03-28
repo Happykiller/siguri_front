@@ -19,9 +19,10 @@ export class GetPasskeyForUserUsecase {
               id
               label
               user_id
+              hostname
               user_code
-              display_name
-              challenge_buffer
+              challenge
+              credential_id
             }
           }`
         }

@@ -9,32 +9,25 @@ export class CreatePasskeyUsecase {
     private inversify:Inversify
   ){}
 
-  async execute(dto: CreatePasskeyUsecaseDto): Promise<CreatePasskeyUsecaseModel>  {
+  async execute(dto: any): Promise<any>  {
     try {
       const response:any = await this.inversify.graphqlService.send(
         {
           operationName: 'create_passkey',
-          variables: dto,
-          query: `mutation create_passkey(
-            $label: String!
-            $display_name: String!
-            $challenge_buffer: String!
-            $challenge: String!
-          ) {
+          variables: {
+            dto
+          },
+          query: `mutation create_passkey($dto: CreatePasskeyResolverDto!) {
             create_passkey (
-              dto: {
-                label: $label
-                display_name: $display_name
-                challenge_buffer: $challenge_buffer
-                challenge: $challenge
-              }
+              dto: $dto
             ) {
               id
               label
               user_id
+              hostname
               user_code
-              display_name
-              challenge_buffer
+              challenge
+              credential_id
             }
           }`
         }

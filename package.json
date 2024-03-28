@@ -1,6 +1,6 @@
 {
   "name": "siguri_front",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Front for service Siguri",
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.dev.config.js --mode development --open --hot",
@@ -48,5 +48,8 @@
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.2",
     "zustand": "^4.5.1"
+  },
+  "dependencies": {
+    "@passwordless-id/webauthn": "^1.5.0"
   }
 }
